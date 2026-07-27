@@ -1,2 +1,4 @@
 /copied/
 /__pycache__/
+/.pytest_cache/
+/.agents/
