@@ -1,0 +1,950 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern} % Use scalable vector fonts for microtype
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\gr}{\operatorname{gr}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\area}{\operatorname{area}}
+\newcommand{\dinv}{\operatorname{dinv}}
+\newcommand{\Dyck}{\operatorname{Dyck}}
+\newcommand{\Prim}{\operatorname{Prim}}
+\newcommand{\e}{\mathbf e}
+\newcommand{\alg}{\mathrm{alg}}
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{doi:\,#1}}
+
+\title{On the Middle Coefficients of Rational $q,t$-Catalan Polynomials}
+\author{Graham Hawkes}
+\date{August 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $r,s$ be coprime positive integers and let
+$g=(r-1)(s-1)/2$.  We prove that the part of the rational
+$q,t$-Catalan polynomial $C_{r,s}(q,t)$ of total degree $g-\delta$
+has a two-variable Schur expansion
+\[
+ C_{r,s;\delta}(q,t)
+ =\sum_{a=0}^{\min\{\delta,\lfloor(g-\delta)/2\rfloor\}}
+ c_{r,s;\delta,a}\,s_{(g-\delta-a,a)}(q,t),
+ \qquad c_{r,s;\delta,a}\in\Z_{\geq 0}.
+\]
+Consequently, the coefficient of $q^jt^{g-\delta-j}$ is independent
+of $j$ for
+\[
+ \delta\leq j\leq g-2\delta.
+\]
+The proof uses Ma's scalar rational-master character theorem for the
+algebraic filtration on a finite-dimensional rational Cherednik
+module.  That character is converted into the bigraded Hilbert series
+of the maximal-ideal associated graded of the spherical module.  Each
+fixed-deficit piece is an $\mathfrak{sl}_2$-module, and its primitive
+multiplicities are controlled by a quotient generated in positive
+deficit.  We also deduce a primitive Hodge-vanishing statement for the
+Catalan variety of Galashin and Lam.  An appendix records the exact
+version of Ma's theorem used here and gives a self-contained
+normalization argument for the two global grading shifts.
+\end{abstract}
+
+\section{Introduction}
+
+The cases $r=1$ or $s=1$ are immediate, since then the rational
+Catalan polynomial is $1$.  We therefore assume that $r,s\geq2$ are
+coprime and put
+\[
+ g=\frac{(r-1)(s-1)}2.
+\]
+In the area--dinv convention of the rational shuffle theorem
+\cite{Mellit}, the rational $q,t$-Catalan polynomial is
+\begin{equation}\label{eq:Catalan-definition}
+ C_{r,s}(q,t)
+ =\sum_{D\in\Dyck_{r,s}}q^{\area(D)}t^{\dinv(D)}.
+\end{equation}
+For $0\leq\delta\leq g$, define the fixed-deficit slice
+\begin{equation}\label{eq:deficit-slice}
+ C_{r,s;\delta}(q,t)
+ =\sum_{A+B=g-\delta}
+ [q^At^B]C_{r,s}(q,t)\,q^At^B.
+\end{equation}
+Thus every monomial in this slice has total degree
+$N=g-\delta$.
+
+Our main result gives more than a constant middle interval: it bounds
+the support of the full two-variable Schur expansion.
+
+\begin{theorem}[Schur-support bound]\label{thm:main}
+For every $0\leq\delta\leq g$, there are nonnegative integers
+$c_{r,s;\delta,a}$ such that, with $N=g-\delta$,
+\begin{equation}\label{eq:main-Schur}
+ C_{r,s;\delta}(q,t)
+ =\sum_{a=0}^{\min\{\delta,\lfloor N/2\rfloor\}}
+ c_{r,s;\delta,a}\,s_{(N-a,a)}(q,t).
+\end{equation}
+Equivalently, no constituent $s_{(N-a,a)}(q,t)$ occurs when
+$a>\delta$.
+\end{theorem}
+
+Since
+\begin{equation}\label{eq:two-variable-Schur}
+ s_{(N-a,a)}(q,t)
+ =\sum_{j=a}^{N-a}q^jt^{N-j},
+\end{equation}
+we obtain the following coefficient statement.
+
+\begin{corollary}[Flat middle]\label{cor:flat-middle}
+For every $0\leq\delta\leq g$, the coefficient
+\[
+ [q^jt^{g-\delta-j}]C_{r,s}(q,t)
+\]
+is independent of $j$ throughout
+\begin{equation}\label{eq:flat-interval}
+ \delta\leq j\leq g-2\delta.
+\end{equation}
+The interval is nonempty exactly when $3\delta\leq g$.
+\end{corollary}
+
+The analogous full statement in the classical case
+$C_n(q,t)=C_{n+1,n}(q,t)$ was formulated by the author as
+\cite[Conjecture~5.38]{HawkesDyck}.  Thus
+Corollary~\ref{cor:flat-middle} proves that conjecture and gives its
+rational extension.  Symmetric string decompositions and related
+formulas were previously obtained in several special settings.  The
+case with one parameter equal to $3$ has an explicit formula due to
+Kaliszewski and Li \cite{KaliszewskiLi}; generalized $q,t$-Catalan
+polynomials of length at most $4$ admit symmetric-chain decompositions
+by Gorsky, Hawkes, Schilling, and Rainbolt \cite{GHSR}; and a
+symmetric monomial-string formula for general rational parameters was
+proposed in \cite{HawkesRational}.  The new point here is the uniform
+primitive-support inequality $a\leq\delta$ for every coprime pair.
+
+The proof is algebraic.  Let $L_{r/s}$ be the finite-dimensional
+irreducible polynomial representation of the type-$A$ rational
+Cherednik algebra, and let
+\[
+ R=\e L_{r/s}=L_{r/s}^{S_s}
+\]
+be its spherical part.  Ma's rational-master theorem identifies the
+bigraded character of the algebraic filtration on $R$ with
+$C_{r,s}$.  The Gorsky--Oblomkov--Rasmussen--Shende filtration then
+converts this character into the Hilbert series of
+\[
+ G=\gr_{\mathfrak m}R,
+\]
+where $\mathfrak m=R_{>0}$.  The fixed-deficit subspace
+\[
+ G^{(\delta)}=\bigoplus_{\ell\geq0}G_{2\ell+\delta,\ell}
+\]
+is an actual finite-dimensional $\mathfrak{sl}_2$-module.  Its
+raising operator is multiplication by $p_2/2$.  The multiplicity of a
+string beginning in position $a$ is therefore a homogeneous dimension
+of $G/(p_2)$.  Finally,
+\[
+ \C[z_3,\ldots,z_s]\twoheadrightarrow G/(p_2),
+ \qquad \deg z_j=(j,1),
+\]
+and every generator $z_j$, $j\geq3$, contributes at least one unit of
+deficit.  A monomial of maximal-ideal order $a$ must consequently
+have deficit at least $a$.
+
+The rational-master character framework was formulated by Gorsky and
+Negu\c{t} \cite{GorskyNegut}.  The only input not presently available
+in a refereed publication is the scalar rational-master character in
+Ma's updated author manuscript \cite{MaCuspidal}.  Ma's filtration comparison is now
+published \cite{MaFiltrations}.  Appendix~\ref{app:Ma} identifies the
+exact manuscript version used here, records the logical dependencies,
+and supplies a unit normalization that fixes both global grading
+shifts.
+
+The paper is organized as follows.  Section~\ref{sec:Cherednik-input}
+states the Cherednik input and fixes filtration conventions.
+Section~\ref{sec:m-adic} converts the character to the
+$\mathfrak m$-adic associated graded.  Sections~\ref{sec:sl2} and
+\ref{sec:support} construct the fixed-deficit $\mathfrak{sl}_2$-module
+and prove the support bound.  Section~\ref{sec:consequences} gives
+coefficient formulas and examples.  Section~\ref{sec:Hodge} records
+the Hodge-theoretic corollary.
+
+\section{The scalar Cherednik character}\label{sec:Cherednik-input}
+
+Set $c=r/s$ and let $H_c(S_s,\mathfrak h)$ be the rational Cherednik
+algebra of type $A_{s-1}$, where
+\[
+ \mathfrak h
+ =\{(x_1,\ldots,x_s)\in\C^s:x_1+\cdots+x_s=0\}.
+\]
+Let $L_c$ be the unique finite-dimensional irreducible quotient of the
+polynomial representation, let
+\[
+ \e=\frac1{s!}\sum_{w\in S_s}w,
+\]
+and put
+\[
+ R=\e L_c=L_c^{S_s}.
+\]
+Let $h$ be the Cartan element in the internal Cherednik
+$\mathfrak{sl}_2$, and write
+\[
+ R=\bigoplus_{k\in\Z}R(k)
+\]
+for the $h$-weight decomposition.  We use the standard normalization
+in which the constant polynomial has weight $-g$; a homogeneous
+polynomial of ordinary degree $u$ then has weight
+\begin{equation}\label{eq:Euler-degree}
+ k=u-g.
+\end{equation}
+
+Let $F_i^{\alg}L_c$ be the algebraic filtration of
+Gorsky--Oblomkov--Rasmussen--Shende \cite{GORS}, equivalently Ma's
+algebraic/Kazhdan filtration, and set
+\[
+ F_i^{\alg}R=R\cap F_i^{\alg}L_c.
+\]
+Every filtration step is $S_s$-stable.  Since the symmetrizer is an
+exact projection in characteristic zero,
+\[
+ \gr^{\alg}R\cong \e\,\gr^{\alg}L_c
+\]
+as a bigraded vector space.
+
+The character theorem needed below is the following scalar
+specialization of Ma's rational-master theorem.
+
+\begin{theorem}[Ma's scalar rational-master character]
+\label{thm:Ma-character}
+For coprime positive integers $r,s$,
+\begin{equation}\label{eq:Ma-character}
+ \sum_{i,k}
+ \dim\gr_i^{\alg}R(k)\,x^ky^i
+ =C_{r,s}(xy,x^{-1}y),
+\end{equation}
+where
+\[
+ \gr_i^{\alg}R(k)
+ =\frac{F_i^{\alg}R(k)}{F_{i-1}^{\alg}R(k)}.
+\]
+\end{theorem}
+
+Appendix~\ref{app:Ma} explains the exact source and normalization of
+Theorem~\ref{thm:Ma-character}.  The remainder of the argument uses
+that theorem, published results of \cite{GORS}, and elementary
+commutative algebra.
+
+For reference, the three filtrations used in the proof are summarized
+below.
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Notation & Direction & Meaning \\
+\midrule
+$\mathcal F^iL_c$ & decreasing & modified powers filtration of \cite{GORS} \\
+$F_i^{\alg}L_c$ & increasing & $(\mathcal F^iL_c)^\perp$ for the Dunkl form \\
+$\mathfrak m^\ell R$ & decreasing & powers of the homogeneous maximal ideal of $R$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{The maximal-ideal associated graded}\label{sec:m-adic}
+
+The polynomial representation quotient has the form
+\[
+ L_c\cong\C[\mathfrak h]/I_c
+\]
+for a homogeneous $S_s$-stable ideal $I_c$.  Exactness of invariants
+gives
+\[
+ R\cong
+ \C[\mathfrak h]^{S_s}/(I_c\cap\C[\mathfrak h]^{S_s}).
+\]
+For
+\[
+ p_j=\sum_{i=1}^s x_i^j,
+\]
+we have $p_1=0$ on $\mathfrak h$, and
+\[
+ \C[\mathfrak h]^{S_s}=\C[p_2,p_3,\ldots,p_s].
+\]
+Thus
+\begin{equation}\label{eq:R-presentation}
+ R\cong\C[p_2,p_3,\ldots,p_s]/J
+\end{equation}
+for a homogeneous ideal $J$.
+
+Let
+\[
+ \mathfrak m=R_{>0}
+\]
+and form the doubly graded algebra
+\[
+ G=\gr_{\mathfrak m}R
+ =\bigoplus_{u,\ell}G_{u,\ell},
+ \qquad
+ G_{u,\ell}
+ =\frac{(\mathfrak m^\ell)_u}{(\mathfrak m^{\ell+1})_u}.
+\]
+Here $u$ is ordinary polynomial degree and $\ell$ is
+$\mathfrak m$-adic order.
+
+Let $\mathfrak a\subseteq L_c$ be the ideal generated by the
+positive-degree invariant polynomials.  Under $R=L_c^{S_s}$,
+\[
+ \mathfrak a=\mathfrak mL_c.
+\]
+
+\begin{lemma}\label{lem:intersection}
+For every $j\geq0$,
+\begin{equation}\label{eq:intersection}
+ \mathfrak a^j\cap R=\mathfrak m^j.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The inclusion $\mathfrak m^j\subseteq\mathfrak a^j\cap R$ is
+immediate.  Conversely, write an element
+$v\in\mathfrak m^jL_c\cap R$ as
+\[
+ v=\sum_\nu r_\nu w_\nu,
+ \qquad r_\nu\in\mathfrak m^j,
+ \quad w_\nu\in L_c.
+\]
+Let $\rho:L_c\to L_c^{S_s}=R$ be the Reynolds operator.  Since the
+$r_\nu$ are invariant, $\rho$ is $R$-linear.  Hence
+\[
+ v=\rho(v)=\sum_\nu r_\nu\rho(w_\nu)\in\mathfrak m^j.
+\]
+\end{proof}
+
+Gorsky--Oblomkov--Rasmussen--Shende define the modified decreasing
+filtration
+\begin{equation}\label{eq:GORS-decreasing}
+ \mathcal F^iL_c
+ =\sum_{j\geq0}
+ \left(
+ \mathfrak a^j\cap
+ \bigoplus_{k<2j-i}L_c(k)
+ \right).
+\end{equation}
+Their Proposition~4.5 shows that every $\mathcal F^iL_c$ is preserved
+by the internal $\mathfrak{sl}_2$.
+
+\begin{lemma}\label{lem:restricted-filtration}
+At Euler weight $k$,
+\begin{equation}\label{eq:restricted-filtration}
+ \mathcal F^iR(k)
+ =\mathfrak m^{\lfloor(i+k)/2\rfloor+1}\cap R(k),
+\end{equation}
+where $\mathfrak m^j=R$ for $j\leq0$.
+\end{lemma}
+
+\begin{proof}
+Each summand in \eqref{eq:GORS-decreasing} is $S_s$-stable, so taking
+invariants commutes with the sum.  At weight $k$, the summand indexed
+by $j$ occurs precisely when
+\[
+ k<2j-i,
+ \qquad\text{or equivalently}\qquad
+ j>\frac{i+k}{2}.
+\]
+The powers of $\mathfrak m$ form a decreasing chain, so the sum is the
+smallest occurring power,
+$\mathfrak m^{\lfloor(i+k)/2\rfloor+1}$.  Apply
+Lemma~\ref{lem:intersection}.
+\end{proof}
+
+The algebraic filtration is defined using the nondegenerate Dunkl
+form:
+\begin{equation}\label{eq:orthogonal-filtration}
+ F_i^{\alg}L_c=(\mathcal F^iL_c)^\perp.
+\end{equation}
+The form is homogeneous and $S_s$-invariant.  Its restriction to $R$
+is nondegenerate: for $v\in R$ and $w\in L_c$, invariance gives
+$(v,w)=(v,\rho(w))$.  Thus a vector in $R$ orthogonal to $R$ is
+orthogonal to all of $L_c$ and is zero.  The same averaging argument
+gives
+\[
+ F_i^{\alg}R=(\mathcal F^iR)^{\perp_R}.
+\]
+Consequently,
+\begin{equation}\label{eq:duality}
+ \gr_i^{\alg}R(k)
+ \cong
+ \left(
+ \frac{\mathcal F^{i-1}R(k)}{\mathcal F^iR(k)}
+ \right)^*
+\end{equation}
+as vector spaces.  We use only equality of dimensions; no equivariant
+identification with the dual is needed.
+
+\begin{proposition}\label{prop:gr-comparison}
+If $i+k$ is odd, then $\gr_i^{\alg}R(k)=0$.  If
+$i+k=2\ell$, then
+\begin{equation}\label{eq:gr-comparison}
+ \dim\gr_i^{\alg}R(k)=\dim G_{g+k,\ell}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+If $i+k=2\ell$, Lemma~\ref{lem:restricted-filtration} gives
+\[
+ \mathcal F^{i-1}R(k)=\mathfrak m^\ell\cap R(k),
+ \qquad
+ \mathcal F^iR(k)=\mathfrak m^{\ell+1}\cap R(k).
+\]
+By \eqref{eq:Euler-degree}, weight $k$ is ordinary degree $u=g+k$,
+so the quotient in \eqref{eq:duality} is $G_{g+k,\ell}$.  If $i+k$
+is odd, the powers appearing for $i-1$ and $i$ coincide.
+\end{proof}
+
+We can now rewrite the rational-master character entirely in terms of
+$G$.
+
+\begin{proposition}\label{prop:Catalan-G-character}
+One has
+\begin{equation}\label{eq:Catalan-G-character}
+ C_{r,s}(q,t)
+ =\sum_{u,\ell}\dim G_{u,\ell}\,
+ q^\ell t^{g-u+\ell}.
+\end{equation}
+In particular, the deficit of the summand indexed by $(u,\ell)$ is
+\begin{equation}\label{eq:deficit-u-ell}
+ \delta=u-2\ell.
+\end{equation}
+Thus, if
+\begin{equation}\label{eq:G-delta}
+ G^{(\delta)}
+ =\bigoplus_{\ell\geq0}G_{2\ell+\delta,\ell},
+\end{equation}
+then
+\begin{equation}\label{eq:deficit-character}
+ C_{r,s;\delta}(q,t)
+ =\sum_{\ell\geq0}
+ \dim G_{2\ell+\delta,\ell}\,
+ q^\ell t^{g-\delta-\ell}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+A monomial $q^At^B$ on the right side of
+\eqref{eq:Ma-character} becomes
+\[
+ (xy)^A(x^{-1}y)^B=x^{A-B}y^{A+B}.
+\]
+Hence $k=A-B$ and $i=A+B$.  Proposition~\ref{prop:gr-comparison}
+then gives
+\[
+ \ell=\frac{i+k}{2}=A,
+ \qquad
+ u=g+k=g+A-B.
+\]
+Solving for $B$ yields $B=g-u+\ell$, which proves
+\eqref{eq:Catalan-G-character}.  The total $q,t$-degree is
+$g-u+2\ell$, giving \eqref{eq:deficit-u-ell} and
+\eqref{eq:deficit-character}.
+\end{proof}
+
+The absence of negative deficits is also immediate from
+\eqref{eq:R-presentation}: every element of $\mathfrak m^\ell$ has
+ordinary degree at least $2\ell$, because the invariant algebra has no
+degree-one generator.
+
+\section{Fixed deficit and the internal \texorpdfstring{$\mathfrak{sl}_2$}{sl2}}
+\label{sec:sl2}
+
+The internal Cherednik $\mathfrak{sl}_2$ has raising operator
+\begin{equation}\label{eq:E-p2}
+ E=\frac12\left(p_2-\frac1s p_1^2\right)=\frac12p_2,
+\end{equation}
+since $p_1=0$ on $\mathfrak h$, and $[h,E]=2E$.
+
+Fix $\delta$ and write
+\[
+ N=g-\delta.
+\]
+For $G_{2\ell+\delta,\ell}$, the Euler weight is
+\[
+ k=(2\ell+\delta)-g=2\ell-N.
+\]
+The relation $i+k=2\ell$ then gives $i=N$.  Summing over all weights
+produces an actual weight-graded identification
+\begin{equation}\label{eq:fixed-deficit-identification}
+ \frac{\mathcal F^{N-1}R}{\mathcal F^NR}
+ \cong
+ \bigoplus_{\ell\geq0}G_{2\ell+\delta,\ell}
+ =G^{(\delta)}.
+\end{equation}
+The quotient on the left is $\mathfrak{sl}_2$-stable by
+\cite[Proposition~4.5]{GORS}; we transport this action to
+$G^{(\delta)}$.
+
+The following compatibility is the key bridge between the
+representation-theoretic and commutative-algebraic descriptions.
+
+\begin{lemma}\label{lem:E-compatibility}
+Under \eqref{eq:fixed-deficit-identification}, the raising operator
+$E=p_2/2$ is multiplication by the initial form of $p_2/2$ in
+$G=\gr_{\mathfrak m}R$.  In bidegrees,
+\begin{equation}\label{eq:E-bidegree}
+ E:G_{u,\ell}\longrightarrow G_{u+2,\ell+1}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+At weight $k=2\ell-N$, the corresponding summand of the left side of
+\eqref{eq:fixed-deficit-identification} is
+\[
+ \frac{\mathfrak m^\ell\cap R(k)}
+      {\mathfrak m^{\ell+1}\cap R(k)}.
+\]
+Multiplication by $p_2$ raises ordinary degree by $2$, Euler weight by
+$2$, and maximal-ideal order by at least $1$.  Modulo
+$\mathfrak m^{\ell+2}$, the induced map is precisely multiplication by
+the initial form of $p_2$.  Dividing by $2$ gives the action of $E$.
+\end{proof}
+
+Every finite-dimensional $\mathfrak{sl}_2$-module is a direct sum of
+irreducibles.  An irreducible whose lowest Euler weight is
+$-N+2a$ has weights
+\[
+ -N+2a,-N+2a+2,\ldots,N-2a.
+\]
+By \eqref{eq:deficit-character}, its contribution to the fixed-deficit
+character is
+\[
+ q^at^{N-a}+q^{a+1}t^{N-a-1}+\cdots+q^{N-a}t^a
+ =s_{(N-a,a)}(q,t).
+\]
+We have therefore proved the preliminary Schur expansion
+\begin{equation}\label{eq:preliminary-Schur}
+ C_{r,s;\delta}(q,t)
+ =\sum_{a=0}^{\lfloor N/2\rfloor}
+ c_{r,s;\delta,a}\,s_{(N-a,a)}(q,t),
+ \qquad c_{r,s;\delta,a}\in\Z_{\geq0}.
+\end{equation}
+The remaining issue is the support bound $a\leq\delta$.
+
+For a finite-dimensional $\mathfrak{sl}_2$-module $V$, the quotient
+$V/EV$ contains exactly the lowest-weight line of each irreducible
+summand.  Applied to $G^{(\delta)}$, this gives
+\begin{equation}\label{eq:primitive-G-delta}
+ c_{r,s;\delta,a}
+ =\dim\left(G^{(\delta)}/EG^{(\delta)}\right)_{2a+\delta,a}.
+\end{equation}
+Since $E$ preserves deficit, this is the corresponding component of
+the global quotient:
+\begin{equation}\label{eq:primitive-global}
+ c_{r,s;\delta,a}
+ =\dim(G/EG)_{2a+\delta,a}.
+\end{equation}
+
+\section{The primitive-support bound}\label{sec:support}
+
+The presentation \eqref{eq:R-presentation} is a filtered surjection
+for the homogeneous maximal-ideal filtrations.  The image of
+$(p_2,\ldots,p_s)^\ell$ is exactly $\mathfrak m^\ell$, so passage to
+associated gradeds gives a bigraded surjection
+\begin{equation}\label{eq:polynomial-to-G}
+ \C[z_2,z_3,\ldots,z_s]\twoheadrightarrow G,
+ \qquad \deg z_j=(j,1),
+\end{equation}
+where $z_j$ is the initial form of $p_j$.  By
+Lemma~\ref{lem:E-compatibility}, the image of $z_2$ is $2E$.
+Quotienting by it yields
+\begin{equation}\label{eq:polynomial-to-primitive}
+ \C[z_3,z_4,\ldots,z_s]\twoheadrightarrow G/EG.
+\end{equation}
+
+A monomial $z_3^{b_3}\cdots z_s^{b_s}$ has maximal-ideal order
+\[
+ a=\sum_{j=3}^s b_j
+\]
+and ordinary degree
+\[
+ u=\sum_{j=3}^s j b_j.
+\]
+Its deficit is therefore
+\begin{equation}\label{eq:monomial-deficit}
+ \delta=u-2a
+ =\sum_{j=3}^s(j-2)b_j
+ \geq\sum_{j=3}^s b_j=a.
+\end{equation}
+Thus the source of \eqref{eq:polynomial-to-primitive} has no component
+of bidegree $(2a+\delta,a)$ when $a>\delta$.  A quotient cannot create
+a missing homogeneous component, so
+\[
+ (G/EG)_{2a+\delta,a}=0
+ \qquad(a>\delta).
+\]
+Together with \eqref{eq:primitive-global}, this proves
+$c_{r,s;\delta,a}=0$ for $a>\delta$.  Substituting into
+\eqref{eq:preliminary-Schur} proves
+Theorem~\ref{thm:main}.
+
+\begin{proof}[Proof of Corollary~\ref{cor:flat-middle}]
+Let $N=g-\delta$.  Every occurring string in
+\eqref{eq:main-Schur} begins at some $a\leq\delta$ and ends at
+$N-a\geq N-\delta$.  Hence every such string contains
+$q^jt^{N-j}$ exactly once whenever
+\[
+ \delta\leq j\leq N-\delta=g-2\delta.
+\]
+The coefficient there is $\sum_a c_{r,s;\delta,a}$, independent of
+$j$.
+\end{proof}
+
+\section{Consequences and examples}\label{sec:consequences}
+
+The Schur expansion gives the complete coefficient sequence in each
+deficit.
+
+\begin{corollary}\label{cor:coefficient-formula}
+For $0\leq j\leq N=g-\delta$,
+\begin{equation}\label{eq:coefficient-formula}
+ [q^jt^{N-j}]C_{r,s;\delta}(q,t)
+ =\sum_{0\leq a\leq\min\{\delta,j,N-j\}}
+ c_{r,s;\delta,a}.
+\end{equation}
+Consequently, every fixed-deficit coefficient sequence is symmetric,
+weakly increasing toward the center, constant on the interval
+$[\delta,N-\delta]$ when that interval is nonempty, and weakly
+decreasing afterward.  Moreover,
+\begin{equation}\label{eq:coefficient-difference}
+ [q^jt^{N-j}]C_{r,s;\delta}
+ -[q^{j-1}t^{N-j+1}]C_{r,s;\delta}
+ =c_{r,s;\delta,j}
+\end{equation}
+for $1\leq j\leq\min\{\delta,\lfloor N/2\rfloor\}$.
+\end{corollary}
+
+The free polynomial source in \eqref{eq:polynomial-to-primitive}
+also gives a useful upper bound.
+
+\begin{proposition}\label{prop:partition-bound}
+For all $a,\delta\geq0$,
+\begin{equation}\label{eq:partition-bound}
+ c_{r,s;\delta,a}
+ \leq
+ [X^aY^\delta]
+ \prod_{j=3}^s\frac1{1-XY^{j-2}}.
+\end{equation}
+In particular, nonvanishing implies
+\begin{equation}\label{eq:two-sided-support}
+ a\leq\delta\leq(s-2)a.
+\end{equation}
+If $s\geq3$ and $a=\delta$, the only possible source monomial is
+$z_3^\delta$, so
+\begin{equation}\label{eq:outer-multiplicity}
+ c_{r,s;\delta,\delta}\leq1.
+\end{equation}
+For $s=2$, the source in \eqref{eq:polynomial-to-primitive} is
+$\C$, and only $a=\delta=0$ occurs.
+\end{proposition}
+
+\begin{proof}
+The coefficient on the right side of \eqref{eq:partition-bound}
+counts monomials satisfying
+\[
+ \sum_{j=3}^s b_j=a,
+ \qquad
+ \sum_{j=3}^s(j-2)b_j=\delta.
+\]
+The bidegree component of a quotient cannot exceed the corresponding
+component of its source.  The remaining assertions follow from
+$1\leq j-2\leq s-2$.
+\end{proof}
+
+When the interval in Corollary~\ref{cor:flat-middle} is nonempty, its
+common coefficient has the representation-theoretic interpretation
+\begin{equation}\label{eq:common-middle}
+ \sum_a c_{r,s;\delta,a}
+ =\dim\bigl(G^{(\delta)}/EG^{(\delta)}\bigr).
+\end{equation}
+
+\begin{example}[The pair $(3,4)$]\label{ex:3-4}
+Here $g=3$, and
+\[
+ C_{3,4}(q,t)
+ =q^3+q^2t+qt^2+t^3+qt
+ =s_{(3)}(q,t)+s_{(1,1)}(q,t).
+\]
+The primitive positions are $(\delta,a)=(0,0)$ and $(1,1)$.
+\end{example}
+
+\begin{example}[The pair $(3,5)$]\label{ex:3-5}
+The explicit rank-word formula of Kaliszewski and Li
+\cite{KaliszewskiLi} gives
+\begin{align*}
+ C_{3,5}(q,t)
+ &=q^4+q^3t+q^2t^2+qt^3+t^4+q^2t+qt^2\\
+ &=s_{(4)}(q,t)+s_{(2,1)}(q,t).
+\end{align*}
+Thus the deficit-zero slice is one string of length $5$, while the
+deficit-one slice is one string of length $2$.  The latter begins at
+$a=\delta=1$, illustrating the sharpness of the support bound.
+\end{example}
+
+\begin{remark}[A parameter equal to $3$]\label{rem:rank-three}
+When the Cherednik denominator is $s=3$, the primitive source is
+$\C[z_3]$.  Hence
+\[
+ c_{r,3;\delta,a}=0\quad\text{unless }a=\delta,
+ \qquad
+ c_{r,3;\delta,\delta}\leq1.
+\]
+Thus each nonzero deficit slice is a single Schur string.  This is the
+algebraic shadow of the explicit one-string-per-skip formula in
+\cite{KaliszewskiLi}.
+\end{remark}
+
+\section{Primitive Hodge vanishing}\label{sec:Hodge}
+
+This section is a corollary of Theorem~\ref{thm:main}, not an input to
+its proof.  Galashin and Lam define the Catalan variety
+\[
+ X_{r,r+s}^{\circ}=\Pi_{r,r+s}^{\circ}/T,
+\]
+a smooth affine complex variety of dimension
+$(r-1)(s-1)=2g$.  Their Theorem~1.1 and equation~(1.11) identify its
+mixed Hodge polynomial with the rational Catalan polynomial
+\cite{GalashinLam}:
+\begin{equation}\label{eq:Hodge-Catalan}
+ C_{r,s}(q,t)
+ =\sum_{K,P}
+ q^{P-K/2}t^{g-K/2}
+ \dim H^{K,(P,P)}(X_{r,r+s}^{\circ},\C).
+\end{equation}
+
+The variety satisfies curious Lefschetz.  There is a class
+\[
+ \gamma\in H^{2,(2,2)}(X_{r,r+s}^{\circ})
+\]
+whose cup product sends $(K,P)$ to $(K+2,P+2)$.  For a class in
+$H^{K,(P,P)}$, set
+\[
+ \delta=K-P.
+\]
+Its total $q,t$-degree in \eqref{eq:Hodge-Catalan} is $g-\delta$, and
+its $q$-exponent is
+\[
+ a=P-\frac K2=\frac{P-\delta}{2}.
+\]
+Equivalently,
+\begin{equation}\label{eq:Hodge-change}
+ P=2a+\delta,
+ \qquad
+ K=2a+2\delta.
+\end{equation}
+Cup product by $\gamma$ sends $a$ to $a+1$, exactly as the Cherednik
+raising operator does.
+
+Define the primitive-source quotient
+\begin{equation}\label{eq:Hodge-primitive}
+ \Prim_\gamma^{P,\delta}(X_{r,r+s}^{\circ})
+ =
+ \frac{H^{P+\delta,(P,P)}(X_{r,r+s}^{\circ})}
+ {\gamma\,H^{P+\delta-2,(P-2,P-2)}(X_{r,r+s}^{\circ})},
+\end{equation}
+with a missing source group interpreted as zero.  By uniqueness of the
+Lefschetz--Schur string decomposition,
+\begin{equation}\label{eq:c-Hodge-primitive}
+ c_{r,s;\delta,a}
+ =\dim\Prim_\gamma^{2a+\delta,\delta}
+ (X_{r,r+s}^{\circ}).
+\end{equation}
+No direct comparison map between this quotient and $G/EG$ is needed:
+both sets of primitive dimensions are determined by the same Schur
+expansion of $C_{r,s}(q,t)$.
+
+Above the middle, curious Lefschetz makes cup product by $\gamma$
+surjective from the preceding Hodge position, so the quotient
+\eqref{eq:Hodge-primitive} vanishes for $P>g$.  In the source range
+$P\leq g$, the support bound $a\leq\delta$ is, by
+\eqref{eq:Hodge-change}, equivalent to $P\leq3\delta$.  We conclude:
+
+\begin{corollary}[Primitive Hodge vanishing]\label{cor:Hodge-vanishing}
+For every $P$ and $\delta$,
+\begin{equation}\label{eq:Hodge-vanishing}
+ \Prim_\gamma^{P,\delta}(X_{r,r+s}^{\circ})=0
+ \qquad\text{whenever }P>3\delta.
+\end{equation}
+Equivalently, writing $K=P+\delta$, the primitive-source quotient in
+$H^{K,(K-\delta,K-\delta)}$ vanishes whenever
+\begin{equation}\label{eq:Hodge-vanishing-K}
+ K>4\delta.
+\end{equation}
+\end{corollary}
+
+\appendix
+
+\section{The rational-master input and its normalization}
+\label{app:Ma}
+
+The proof uses the scalar character in
+Theorem~\ref{thm:Ma-character}.  Because the relevant rational-master
+manuscript is currently an author version, we record the precise
+source and the normalization needed here.
+
+\subsection{Version and logical dependencies}
+
+The arXiv record is \href{https://arxiv.org/abs/2407.00971}{arXiv:2407.00971}.
+The version checked for this paper is the $42$-page author PDF linked
+from Ma's research webpage as ``more updated than arxiv version,''
+with PDF generation date 6 October 2025:
+\begin{center}
+\url{https://xinchma.github.io/pdfs/cuspidal_catalan.pdf}
+\end{center}
+Its SHA-256 digest is
+\begin{center}
+\texttt{1a4bc0ca37d9c7121274248d2792ea6800fd25625af224d2b3e91664d78d9e2d}.
+\end{center}
+The distinction from the older arXiv version matters because the
+updated manuscript uses the rational-Catalan normalization required in
+\eqref{eq:Ma-character}.
+
+In the checked version, the route to the scalar theorem is as follows.
+The rational shuffle theorem is stated as Theorem~5.4, with
+its equation~(76) identifying the scalar spherical coefficient with
+$C_{r,s}(q,t)$.  Theorem~5.5(b) computes the spherical character for
+the Hodge filtration.  Definition~5.1 converts the Hodge filtration
+and Euler grading into the Kazhdan grading.  Propositions~5.9 and 5.10,
+summarized in Corollary~1.3, transfer the result to the
+inductive/algebraic filtration for all positive coprime slopes; the
+all-slope passage uses the slope symmetry recorded in
+\cite[Corollary~1.1]{GorskyArc}.  The filtration identification is also
+supported by the published paper
+\cite{MaFiltrations}, especially Lemma~3.9 and Theorem~3.16.
+
+The stronger sheaf-level identification in Conjecture~4.6 of the
+author manuscript is not used.  The character calculation proceeds
+through the equality of equivariant $K$-classes in Proposition~4.9,
+together with localization and the dimension comparison in
+Theorem~5.5.
+
+\subsection{Fixing both global grading shifts}
+
+The updated manuscript's discussion of extremal Euler degrees fixes
+the Euler normalization.  Since the character has two gradings, we
+record an additional normalization by the spherical unit; this also
+fixes the filtration shift.
+
+Suppose that after the Hodge-to-Kazhdan conversion the scalar character
+were determined only up to a global factor $x^\alpha y^\beta$.  The
+spherical module $R$ has a unique lowest Euler-weight line, spanned by
+the constant polynomial.  Its Euler weight is $-g$ by the standard
+normalization \cite[Theorem~1.10]{BEG}; see also
+\cite[Section~2.2.3]{GORS}.  Its algebraic filtration degree is $g$:
+in the notation of Proposition~\ref{prop:gr-comparison}, the unit is
+$G_{0,0}$, so $k=-g$, $\ell=0$, and $i+k=2\ell$ gives $i=g$.
+Therefore the unit contributes
+\[
+ x^{-g}y^g.
+\]
+
+On the Catalan side, there is a unique area-zero path, and its monomial
+is $t^g$.  Under the substitution $(q,t)=(xy,x^{-1}y)$, this monomial
+is again
+\[
+ (x^{-1}y)^g=x^{-g}y^g.
+\]
+Thus the unique lowest-weight term agrees on both sides, forcing
+\[
+ \alpha=\beta=0.
+\]
+This completes the normalization of
+Theorem~\ref{thm:Ma-character} in the form used in the present paper.
+
+\begin{thebibliography}{99}
+
+\bibitem{BEG}
+Y.~Berest, P.~Etingof, and V.~Ginzburg,
+\emph{Finite-dimensional representations of rational Cherednik algebras},
+Int. Math. Res. Not. 2003, no.~19, 1053--1088,
+\doi{10.1155/S1073792803210205}.
+
+\bibitem{GalashinLam}
+P.~Galashin and T.~Lam,
+\emph{Positroids, knots, and $q,t$-Catalan numbers},
+Duke Math. J. 173 (2024), no.~11, 2117--2195,
+\doi{10.1215/00127094-2023-0049}.
+
+\bibitem{GorskyArc}
+E.~Gorsky,
+\emph{Arc spaces and DAHA representations},
+Selecta Math. (N.S.) 19 (2013), no.~1, 125--140,
+\doi{10.1007/s00029-012-0096-0}.
+
+\bibitem{GHSR}
+E.~Gorsky, G.~Hawkes, A.~Schilling, and J.~Rainbolt,
+\emph{Generalized $q,t$-Catalan numbers},
+Algebraic Combinatorics 3 (2020), no.~4, 855--886,
+\doi{10.5802/alco.120}.
+
+\bibitem{GORS}
+E.~Gorsky, A.~Oblomkov, J.~Rasmussen, and V.~Shende,
+\emph{Torus knots and the rational DAHA},
+Duke Math. J. 163 (2014), no.~14, 2709--2794,
+\doi{10.1215/00127094-2827126}.
+
+\bibitem{GorskyNegut}
+E.~Gorsky and A.~Negu\c{t},
+\emph{Refined knot invariants and Hilbert schemes},
+J. Math. Pures Appl. 104 (2015), no.~3, 403--435,
+\doi{10.1016/j.matpur.2015.03.003}.
+
+\bibitem{HawkesRational}
+G.~Hawkes,
+\emph{A conjectured formula for the rational $q,t$-Catalan polynomial},
+Ann. Comb. 28 (2024), 749--795,
+\doi{10.1007/s00026-023-00662-2}.
+
+\bibitem{HawkesDyck}
+G.~Hawkes,
+\emph{Dyck symmetric functions and applications to $q,t$-Catalan polynomials},
+arXiv:2605.13003v1 (2026).
+
+\bibitem{KaliszewskiLi}
+R.~Kaliszewski and H.~Li,
+\emph{The $(m,n)$-rational $q,t$-Catalan polynomials for $m=3$ and their
+$q,t$-symmetry},
+Discrete Math. Theor. Comput. Sci. Proc., FPSAC 2015, 769--780,
+\doi{10.46298/dmtcs.2500}.
+
+\bibitem{MaCuspidal}
+X.~Ma,
+\emph{From Cherednik algebras to knot homology via cuspidal
+$\mathcal D$-modules},
+arXiv:2407.00971 (2024); updated author manuscript, 42 pages,
+PDF generated 6 October 2025.
+
+\bibitem{MaFiltrations}
+X.~Ma,
+\emph{Rational Cherednik algebras and knot invariants: filtrations},
+Int. Math. Res. Not. 2026, no.~10, rnag089,
+\doi{10.1093/imrn/rnag089}.
+
+\bibitem{Mellit}
+A.~Mellit,
+\emph{Toric braids and $(m,n)$-parking functions},
+Duke Math. J. 170 (2021), no.~18, 4123--4169,
+\doi{10.1215/00127094-2021-0011}.
+
+\end{thebibliography}
+
+\end{document}
