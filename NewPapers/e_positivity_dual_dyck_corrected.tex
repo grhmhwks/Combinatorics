@@ -1,0 +1,1460 @@
+\documentclass[11pt,reqno]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[letterpaper,left=1.12in,right=1.12in,top=1.0in,bottom=1.0in,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs}
+\usepackage{booktabs,tabularx,array}
+\usepackage{xurl}
+\usepackage[hidelinks,unicode]{hyperref}
+\hypersetup{pdftitle={Elementary positivity of weighted chromatic functions and dual Dyck symmetric functions},
+ pdfsubject={Weighted chromatic elementary positivity and step-tau Dyck factorizations},
+ pdfkeywords={Dyck symmetric functions, elementary positivity, natural unit interval graphs, multicolorings, common histories}}
+\newcommand{\NN}{\mathbb Z_{\geq0}}
+\newcommand{\ZZ}{\mathbb Z}
+\newcommand{\QQ}{\mathbb Q}
+\newcommand{\xx}{\mathbf x}
+\newcommand{\zz}{\mathbf z}
+\newcommand{\mm}{\mathbf m}
+\newcommand{\Sym}{\Lambda}
+\newcommand{\QSym}{\operatorname{QSym}}
+\newcommand{\DS}{\operatorname{DS}}
+\newcommand{\DD}{\mathcal D}
+\newcommand{\EE}{\mathscr E}
+\newcommand{\CC}{\mathscr C}
+\newcommand{\HH}{\mathcal H}
+\newcommand{\WW}{\mathcal W}
+\newcommand{\asc}{\operatorname{asc}}
+\newcommand{\inv}{\operatorname{inv}}
+\newcommand{\dinv}{\operatorname{dinv}}
+\newcommand{\di}{\operatorname{di}}
+\newcommand{\Des}{\operatorname{Des}}
+\newcommand{\SYT}{\operatorname{SYT}}
+\newcommand{\csf}{\mathsf{csf}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\wt}{\operatorname{wt}}
+\newcommand{\Frob}{\operatorname{Frob}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\sourcefile}[2]{\href{https://github.com/openai/math/blob/fd4aeeb/lean/OAI/Combinatorics/Chromatic/#1}{\nolinkurl{#2}}}
+\newcommand{\decl}[1]{\nolinkurl{#1}}
+\newtheorem{maintheorem}{Theorem}
+\renewcommand{\themaintheorem}{\Alph{maintheorem}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\numberwithin{equation}{section}
+\setlength{\emergencystretch}{1.5em}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\title[Weighted chromatic and dual Dyck positivity]{Elementary positivity of weighted chromatic functions and dual Dyck symmetric functions}
+\author{Graham Hawkes}
+\date{October 10, 2026}
+\keywords{Dyck symmetric functions, elementary positivity, chromatic quasisymmetric functions, natural unit interval graphs, multicolorings}
+
+\begin{document}
+\begin{abstract}
+We prove coefficientwise elementary positivity for the dual step-$\tau$
+Dyck factorization series of every finite multiset of integers and every
+integer $\tau\geq0$.  The corresponding affine series are coefficientwise
+positive in the complete homogeneous basis.  With an explicit change of
+statistic, the step-one specialization proves elementary positivity of
+Hawkes's dual Dyck symmetric functions and homogeneous positivity of his
+affine Dyck symmetric functions.  The main algebraic result is a weighted
+extension of chromatic elementary positivity: for a natural unit interval
+graph, a vertex of weight $m$ receives a set of $m$ colors, and the resulting
+inversion-refined chromatic function is elementary-positive over
+$\mathbb Z_{\geq0}[u]$.  We use OpenAI's positive common-history theorem as
+an external input.  The extension replaces a squarefree vertex target by
+an arbitrary multiplicity target and proves the associated coefficient
+identity directly.  A squarefree color coefficient then forces each
+positive Laurent history weight to have finite support in the correct
+grading.  This avoids division by quantum factorials.  We also obtain
+palindromicity, a history formula for the elementary coefficients, and
+positivity for generalized Hessenberg chromatic functions.
+\end{abstract}
+\maketitle
+
+\section{Introduction and main results}\label{sec:intro}
+
+The dual and affine Dyck symmetric functions introduced by
+Hawkes~\cite{Hawkes2026} arise from factorizations of a multiset into
+integer sequences satisfying complementary local inequalities.  His
+insertion correspondence proves Schur positivity of the dual functions;
+an involution gives the conjugate-shape expansion for the affine
+functions~\cite[Theorem~3.18 and Corollaries~3.19--3.20]{Hawkes2026}.
+The present paper strengthens these conclusions to positivity in the
+elementary and complete homogeneous bases, respectively.  We work
+throughout with an integer step $\tau\geq0$, obtaining the original
+functions as a step-one corollary with their original statistic.
+
+A dual factor has strictly increasing entries whose successive gaps
+exceed $\tau$.  Its set of values is therefore an independent set in the
+graph joining distinct values at distance at most $\tau$.  When a value
+occurs repeatedly in the multiset, its occurrences lie in distinct
+factors.  Thus the appropriate graph model is a \emph{multicoloring}:
+a vertex of weight $m$ receives a set of $m$ colors.  This weighted
+chromatic construction is already present in Hwang~\cite{Hwang2024}
+and Kiem--Lee~\cite[Definitions~4.1--4.3]{KiemLee2024}.
+Numbered references to Hawkes and Kiem--Lee use the respective arXiv
+versions listed in the bibliography.  It is not the
+alternative vertex-weighted construction that assigns one color, raised
+to a vertex-dependent power, to each vertex.
+
+The unweighted chromatic quasisymmetric functions of natural unit
+interval graphs were introduced by Shareshian and
+Wachs~\cite{ShareshianWachs2016}.  Our proof uses the common-history
+machinery underlying OpenAI's elementary-positivity
+argument~\cite{OpenAI2026,OpenAILean2026}.  The intermediate theorem needed
+here is more flexible than the final unweighted statement: it transports
+a general root-cone coefficient to a positive combination of ordinary
+elementary coefficients.  We exploit this flexibility at a target with
+arbitrary vertex multiplicities.
+
+\subsection{The weighted theorem}
+A \emph{natural unit interval graph} on $[\ell]=\{1,\ldots,\ell\}$ is a
+graph specified by a weakly increasing function
+$h:[\ell]\to[\ell]$ with $h(i)\geq i$, where, for $i<j$,
+\[
+ ij\in E(G)\quad\Longleftrightarrow\quad j\leq h(i).
+\]
+Fix positive integer weights $\mm=(m_1,\ldots,m_\ell)$ and write
+\begin{equation}\label{eq:NA}
+ N=\sum_i m_i,\qquad
+ A=A(G,\mm)=\sum_{\substack{i<j\\ij\in E(G)}}m_i m_j.
+\end{equation}
+A proper set coloring $\gamma$ assigns a set $\gamma_i\subset\mathbb Z_{>0}$
+of cardinality $m_i$ to vertex $i$, with
+$\gamma_i\cap\gamma_j=\varnothing$ whenever $ij\in E(G)$.  Put
+\begin{align}
+ \inv_G(\gamma)
+ &=\sum_{\substack{i<j\\ij\in E(G)}}
+   \#\{(a,b)\in\gamma_i\times\gamma_j:a>b\},\label{eq:weighted-inv}\\
+ C^-_{G,\mm}(\xx;u)
+ &=\sum_{\gamma\text{ proper}}u^{\inv_G(\gamma)}
+       \prod_i\prod_{a\in\gamma_i}x_a.\label{eq:Cminus}
+\end{align}
+The ascent version $C^+_{G,\mm}$ uses $a<b$ in
+\eqref{eq:weighted-inv}.  These are homogeneous quasisymmetric series of
+degree $N$ with polynomial coefficients in $u$.
+
+\begin{maintheorem}[Weighted chromatic elementary positivity]\label{thm:A}
+For every natural unit interval graph $G$ and every positive integer
+weight vector $\mm$, there are polynomials
+$B_{G,\mm,\lambda}(u)\in\mathbb Z_{\geq0}[u]$, indexed by $\lambda\vdash N$,
+such that
+\begin{equation}\label{eq:thmA}
+ C^+_{G,\mm}(\xx;u)=C^-_{G,\mm}(\xx;u)
+   =\sum_{\lambda\vdash N}B_{G,\mm,\lambda}(u)e_\lambda(\xx).
+\end{equation}
+Every coefficient polynomial has degree at most $A$ and satisfies
+\begin{equation}\label{eq:thmA-pal}
+ B_{G,\mm,\lambda}(u)=u^A B_{G,\mm,\lambda}(u^{-1}).
+\end{equation}
+\end{maintheorem}
+
+In particular, symmetry is part of the conclusion, not an input to our
+proof.  For $\mm=(1,\ldots,1)$, this recovers the unweighted result.
+The general weights will be essential for multisets with repeated values.
+
+\subsection{The Dyck theorem}
+Write a finite multiset of integers as
+\[
+ S=c_1^{m_1}\cdots c_\ell^{m_\ell},\qquad
+ c_1<\cdots<c_\ell,\qquad |S|=N.
+\]
+For a fixed integer $\tau\geq0$, define
+\begin{align}
+ A_\tau(S)&=\sum_{\substack{i<j\\c_j-c_i\leq\tau}}m_i m_j,
+       \label{eq:Atau}\\
+ \beta_\tau(S)&=\tau\sum_i\binom{m_i}{2}
+  +\sum_{\substack{i<j\\c_j-c_i\leq\tau}}
+       (\tau-c_j+c_i)m_i m_j.\label{eq:beta}
+\end{align}
+The dual and affine factorization series defined in
+Section~\ref{sec:definitions} are denoted by
+$\DD^*_{S,\tau}(\xx;u)$ and $\DD_{S,\tau}(\xx;u)$.  Their coefficient of
+$u^d$ counts factorizations whose concatenation has statistic
+$\dinv_\tau=d$.
+
+\begin{maintheorem}[Step-$\tau$ Dyck positivity]\label{thm:B}
+For every finite multiset $S$ of integers and every integer $\tau\geq0$,
+there are nonnegative integers $a_{\lambda,k}(S,\tau)$ such that
+\begin{align}
+ \DD^*_{S,\tau}(\xx;u)
+  &=\sum_{\lambda\vdash N}\sum_{k=0}^{A_\tau(S)}
+       a_{\lambda,k}(S,\tau)u^{\beta_\tau(S)+k}e_\lambda(\xx),
+       \label{eq:thmB-dual}\\
+ \DD_{S,\tau}(\xx;u)
+  &=\sum_{\lambda\vdash N}\sum_{k=0}^{A_\tau(S)}
+       a_{\lambda,k}(S,\tau)u^{\beta_\tau(S)+k}h_\lambda(\xx).
+       \label{eq:thmB-affine}
+\end{align}
+Moreover,
+\begin{equation}\label{eq:thmB-pal}
+ a_{\lambda,k}(S,\tau)
+   =a_{\lambda,A_\tau(S)-k}(S,\tau).
+\end{equation}
+Thus each fixed-statistic dual function is $e$-positive and each
+fixed-statistic affine function is $h$-positive.  Both are zero outside
+$\beta_\tau(S)\leq d\leq\beta_\tau(S)+A_\tau(S)$.
+\end{maintheorem}
+
+For $S=\varnothing$, the assertion means that both series are $1$,
+with $a_{\varnothing,0}=1$.  The nonempty case occupies the proof.
+At step one, the factor conditions agree with Hawkes's definitions, but
+our statistic includes the constant
+$\kappa(S)=\sum_i\binom{m_i}{2}$.  After this shift is removed,
+Theorem~\ref{thm:B} gives the following precise classical consequence.
+
+\begin{corollary}\label{cor:classical-intro}
+For every finite multiset $S$ of integers and every $d\geq0$, the functions
+$\DS^*(S,d;\xx)$ and $\DS(S,d;\xx)$ of
+\cite[Definition~2.5]{Hawkes2026} are respectively $e$-positive and
+$h$-positive, with nonnegative integer coefficients.
+\end{corollary}
+
+\subsection{Why the multiplicity extension is needed}
+Replace each vertex $i$ of $G$ by an ordered clique of $m_i$ vertices,
+and replace each original edge by all edges between the corresponding
+cliques.  For the resulting graph $\widetilde G$, the standard blowup
+identity is
+\begin{equation}\label{eq:blowup-intro}
+ X_{\widetilde G}(\xx;u)
+    =\left(\prod_i[m_i]_u!\right)C^+_{G,\mm}(\xx;u),
+ \qquad [m]_u!=\prod_{j=1}^m(1+u+\cdots+u^{j-1}).
+\end{equation}
+See \cite{Hwang2024} and \cite[Remark~4.4 and (4.3)]{KiemLee2024};
+a direct proof is included below.  Elementary positivity of the left
+side does not imply coefficientwise positivity after division by the
+factor on the right.  Even
+\[
+ (1+u)(1-u+u^2)=1+u^3
+\]
+shows why such cancellation would be invalid.
+
+Instead, we extract the coefficient of a lattice monomial with
+multiplicity vector $\mm$ from an independent-set product in a quantum
+torus.  The common-history theorem applies to this coefficient before
+any blowup factorial is introduced.  Its weights are positive Laurent
+series.  A second extraction, this time of the squarefree \emph{color}
+monomial $x_1\cdots x_N$, forces their support to lie in the finite set
+$\{A,A-2,\ldots,-A\}$.  Transposition of zero-one matrices then supplies
+the elementary expansion over $\mathbb Z_{\geq0}[u]$.
+
+Section~\ref{sec:definitions} introduces the step-$\tau$ factorizations
+and their grading.  Section~\ref{sec:colorings} proves the static-statistic
+identity and the weighted coloring correspondence.  Section~\ref{sec:input} states the precise imported input, and
+Section~\ref{sec:weighted-proof} proves Theorem~\ref{thm:A}.
+Section~\ref{sec:dyck-proof} completes the Dyck theorem and its classical
+specialization.  Section~\ref{sec:examples} records direct consequences
+and examples.  Appendix~\ref{app:sources} gives the source correspondence
+at a fixed repository revision, and Appendix~\ref{app:checks} describes
+independent exact computations.  The connection to $q,t$-Catalan
+polynomials in~\cite{Hawkes2026} motivates the result; no additional
+Catalan identity is needed for the proofs below.
+
+\section{\texorpdfstring{Step-$\tau$}{Step-tau} factorizations and grading conventions}\label{sec:definitions}
+
+\subsection{Symmetric functions and coefficientwise positivity}
+We work with the ring $\Sym_\ZZ$ of symmetric functions in
+$\xx=(x_1,x_2,\ldots)$.  The elementary and complete homogeneous functions
+are
+\[
+ e_r(\xx)=\sum_{a_1<\cdots<a_r}x_{a_1}\cdots x_{a_r},\qquad
+ h_r(\xx)=\sum_{a_1\leq\cdots\leq a_r}x_{a_1}\cdots x_{a_r},
+\]
+with $e_0=h_0=1$.  For a partition $\lambda$, write
+$e_\lambda=\prod_i e_{\lambda_i}$ and
+$h_\lambda=\prod_i h_{\lambda_i}$.  The involution
+$\omega:\Sym_\ZZ\to\Sym_\ZZ$ is characterized by
+$\omega(e_r)=h_r$; equivalently, $\omega(s_\lambda)=s_{\lambda'}$.
+It acts coefficientwise on $\Sym_\ZZ[u]$ and leaves $u$ fixed.
+
+An element $\sum_\lambda b_\lambda(u)e_\lambda$ is
+\emph{coefficientwise $e$-positive} if every
+$b_\lambda(u)\in\mathbb Z_{\geq0}[u]$.  This is stronger than positivity
+after a numerical specialization of $u$.  The analogous definition
+uses $h_\lambda$.  Finite-variable restrictions will be denoted by a
+subscript $r$ or by displaying $x_1,\ldots,x_r$.  All our series have
+fixed homogeneous degree and are determined by these restrictions.
+
+There are three distinct parameters in the proof.  The integer $N$ is
+the homogeneous degree in $\xx$, the variable $u$ records the inversion
+or Dyck statistic, and the Laurent variable $v$ is used only in the
+quantum-torus argument.  Its relation to $u$ is $u=v^{-2}$, after a
+normalizing factor $v^A$.  In particular, $v$ is not a second Catalan
+parameter.
+
+\subsection{Words and factorizations}
+Let $\WW(S)$ be the set of distinct rearrangements of the multiset $S$.
+Equal occurrences are not labeled.  Fix $\tau\in\NN$.
+
+\begin{definition}\label{def:words}
+A finite integer word $w=(w_1,\ldots,w_n)$ is an \emph{affine step-$\tau$
+word} if $w_{j+1}\leq w_j+\tau$ for every $j<n$.  It is a \emph{dual
+step-$\tau$ word} if $w_{j+1}>w_j+\tau$ for every $j<n$.
+The empty word and each one-letter word satisfy both conditions.
+\end{definition}
+
+No nonnegativity or initial-entry condition is imposed.  These are
+conditions on individual factors, not on the multiset itself.  A
+factorization of $S$ is a sequence
+$\mathcal F=(F_1,F_2,\ldots)$ of finite words, all but finitely many empty,
+whose concatenation $w(\mathcal F)=F_1F_2\cdots$ lies in $\WW(S)$.
+It is affine or dual when each factor has the corresponding property.
+Its monomial is
+\begin{equation}\label{eq:factor-monomial}
+ \xx^{\mathcal F}=\prod_{a\geq1}x_a^{|F_a|}.
+\end{equation}
+Empty factors are important: factor indices are the color labels that
+will be used later.  Our one-indexed convention differs from the
+zero-indexed convention in~\cite{Hawkes2026} only by renaming variables
+and factor indices.
+
+\subsection{The statistic}
+For integers $a,b$, put
+\begin{equation}\label{eq:pair-stat}
+ d_\tau(a,b)=
+ \begin{cases}
+  \max(0,a+\tau-b),&a\leq b,\\
+  \max(0,b+1+\tau-a),&a>b.
+ \end{cases}
+\end{equation}
+For a word $w$, define
+\begin{equation}\label{eq:dinv}
+ \dinv_\tau(w)=\sum_{p<q}d_\tau(w_p,w_q).
+\end{equation}
+The statistic of a factorization is that of its concatenation; there is
+no additional contribution attached to a factor boundary.  Define
+\begin{align}
+ \DD^*_{S,\tau}(\xx;u)
+   &=\sum_{\mathcal F\text{ dual}}u^{\dinv_\tau(w(\mathcal F))}
+            \xx^{\mathcal F},\label{eq:dual-series}\\
+ \DD_{S,\tau}(\xx;u)
+   &=\sum_{\mathcal F\text{ affine}}u^{\dinv_\tau(w(\mathcal F))}
+            \xx^{\mathcal F}.\label{eq:affine-series}
+\end{align}
+Their degree-$d$ coefficients are
+\begin{equation}\label{eq:degree-d}
+ \DS^{*(\tau)}(S,d;\xx)=[u^d]\DD^*_{S,\tau}(\xx;u),\qquad
+ \DS^{(\tau)}(S,d;\xx)=[u^d]\DD_{S,\tau}(\xx;u).
+\end{equation}
+Both are understood to be zero for $d<0$.  Before symmetry has been
+established, we refer to~\eqref{eq:dual-series}--\eqref{eq:affine-series}
+as factorization series.
+
+Every coefficient of a fixed monomial is a finite sum: its exponents
+fix all factor lengths, and only finitely many rearrangements of $S$
+can be concatenations.  An increasing relabeling of the used factor
+indices preserves concatenation and statistic, so the series are
+quasisymmetric.  Their $u$-degrees are uniformly bounded for fixed $S$
+and $\tau$, since there are finitely many words in $\WW(S)$.
+
+\begin{remark}\label{rem:integer-step}
+The integrality of the entries and of $\tau$ matters in the grading
+calculation below.  We prove the full integer-step family; no assertion
+about arbitrary rational slopes is implicit in the terminology.
+\end{remark}
+
+\section{The weighted coloring model}\label{sec:colorings}
+
+\subsection{Separating the constant part of the statistic}
+For $w\in\WW(S)$, set
+\begin{equation}\label{eq:inv-tau}
+ \inv_\tau(w)=\#\{(p,q):p<q,\ 0<w_p-w_q\leq\tau\}.
+\end{equation}
+
+\begin{lemma}[Static decomposition]\label{lem:static}
+For every $w\in\WW(S)$,
+\begin{equation}\label{eq:static}
+ \dinv_\tau(w)=\beta_\tau(S)+\inv_\tau(w).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Consider a pair of occurrences, independently of its order in the word.
+If both entries equal $c_i$, its contribution to~\eqref{eq:dinv} is
+$\tau$.  Summing over equal pairs gives
+$\tau\sum_i\binom{m_i}{2}$.
+
+For two distinct values $c_i<c_j$, let $\delta=c_j-c_i$.  If
+$\delta>\tau$, both orders contribute zero: for the decreasing order,
+$\tau+1-\delta\leq0$ because $\delta$ is an integer.  If
+$1\leq\delta\leq\tau$, then
+\[
+ d_\tau(c_i,c_j)=\tau-\delta,\qquad
+ d_\tau(c_j,c_i)=\tau-\delta+1.
+\]
+There is an order-independent contribution $\tau-\delta$, together
+with an additional $1$ exactly when the larger value precedes the
+smaller.  There are $m_i m_j$ pairs with these two values.  Summing over
+all value pairs proves~\eqref{eq:static}.
+\end{proof}
+
+\begin{corollary}\label{cor:support}
+Every factorization of $S$ has statistic in the interval
+\[
+ \beta_\tau(S)\leq\dinv_\tau\leq\beta_\tau(S)+A_\tau(S).
+\]
+\end{corollary}
+\begin{proof}
+Exactly $A_\tau(S)$ pairs of occurrences have distinct values within
+distance $\tau$.  Each contributes either $0$ or $1$ to
+$\inv_\tau$.
+\end{proof}
+
+The baseline is not just an equal-entry correction when $\tau>1$:
+nearby distinct values also contribute to~\eqref{eq:beta}.  This
+observation will account for the different grading shifts in the
+examples of Section~\ref{sec:examples}.
+
+\subsection{The value graph and the coloring correspondence}
+Define $G_{S,\tau}$ on the value levels $[\ell]$ by
+\begin{equation}\label{eq:value-graph}
+ ij\in E(G_{S,\tau})\quad\Longleftrightarrow\quad
+ i<j\text{ and }c_j-c_i\leq\tau.
+\end{equation}
+Vertex $i$ has weight $m_i$.
+
+\begin{lemma}\label{lem:interval}
+The graph $G_{S,\tau}$ is a natural unit interval graph, with
+Hessenberg function
+\begin{equation}\label{eq:value-h}
+ h_{S,\tau}(i)=\max\{j\in[\ell]:c_j-c_i\leq\tau\}.
+\end{equation}
+Its weighted edge count is $A_\tau(S)$.
+\end{lemma}
+\begin{proof}
+The maximum exists because $j=i$ is admissible.  Increasing $i$
+increases the threshold $c_i+\tau$, so the maximum is weakly increasing.
+It is at least $i$.  For $i<j$, condition~\eqref{eq:value-graph} is
+exactly $j\leq h_{S,\tau}(i)$.  The assertion about the weighted edge
+count follows from~\eqref{eq:Atau}.
+\end{proof}
+
+\begin{proposition}[Dual factorizations as set colorings]\label{prop:bijection}
+There is a monomial-preserving bijection between dual step-$\tau$
+factorizations of $S$ and proper set colorings of $(G_{S,\tau},\mm)$.
+Under this bijection,
+\begin{equation}\label{eq:stat-bijection}
+ \inv_\tau(w(\mathcal F))=\inv_{G_{S,\tau}}(\gamma).
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:dual-color}
+ \DD^*_{S,\tau}(\xx;u)
+   =u^{\beta_\tau(S)}C^-_{G_{S,\tau},\mm}(\xx;u).
+\end{equation}
+\end{proposition}
+\begin{proof}
+A dual factor is strictly increasing, so it contains at most one copy of
+each value.  All pairs of its values have distance greater than $\tau$:
+this is immediate for consecutive values, and a nonconsecutive
+positive gap is even larger.  Thus its value levels form an independent
+set of $G_{S,\tau}$.
+
+Given $\mathcal F=(F_1,F_2,\ldots)$, set
+\[
+ \gamma_i=\{a\geq1:c_i\text{ occurs in }F_a\}.
+\]
+There are exactly $m_i$ such factors.  Adjacent value levels cannot
+occur in the same factor, so $\gamma$ is proper.  Conversely, from a
+proper coloring, form $F_a$ by listing, in increasing order, those
+$c_i$ for which $a\in\gamma_i$.  Its value levels are independent, and
+hence its successive gaps exceed $\tau$.  These constructions are
+inverse.  They also give
+$|F_a|=\#\{i:a\in\gamma_i\}$, proving monomial preservation.
+
+Consider $i<j$ with $c_j-c_i\leq\tau$, and choose colors
+$a\in\gamma_i$, $b\in\gamma_j$.  Properness gives $a\ne b$.
+The occurrence of $c_j$ precedes that of $c_i$ in the concatenation
+precisely when $b<a$.  Thus it contributes to~\eqref{eq:inv-tau}
+precisely when the pair $(a,b)$ contributes to
+$\inv_{G_{S,\tau}}(\gamma)$.  There is no contributing pair within a
+dual factor.  This proves~\eqref{eq:stat-bijection}.
+Combining it with Lemma~\ref{lem:static} proves~\eqref{eq:dual-color}.
+\end{proof}
+
+This identity uses inversions directly.  Neither symmetry nor
+palindromicity has been used to reverse the grading.
+
+\subsection{The clique blowup identity}
+We record a proof of~\eqref{eq:blowup-intro} to specify its exact
+normalization.  Let $M_i=m_1+\cdots+m_i$, with $M_0=0$.  The blowup
+$\widetilde G$ has the consecutive blocks
+$\{M_{i-1}+1,\ldots,M_i\}$.  It is again a natural unit interval graph:
+its Hessenberg function is
+\begin{equation}\label{eq:blowup-h}
+ \widetilde h(a)=M_{h(i)}
+ \quad\text{for }M_{i-1}<a\leq M_i.
+\end{equation}
+
+\begin{proposition}\label{prop:blowup}
+Let $X_{\widetilde G}$ use the usual ascent statistic on proper
+single-color assignments to $\widetilde G$.  Then
+\begin{equation}\label{eq:blowup}
+ X_{\widetilde G}(\xx;u)
+ =\left(\prod_i[m_i]_u!\right)C^+_{G,\mm}(\xx;u).
+\end{equation}
+The corresponding identity also holds with inversions on both sides.
+\end{proposition}
+\begin{proof}
+A proper coloring of a clique uses distinct colors.  Forgetting their
+order within each block produces a proper set coloring of $G$.
+For a fixed set coloring, the choices of order in different blocks are
+independent.  All contributions from edges between blocks are fixed
+and equal the weighted ascent statistic.  Within a block of size $m_i$,
+the generating polynomial of ascent pairs over all orders of its
+colors is $[m_i]_u!$.  Indeed, the inversion generating polynomial of
+permutations has the recurrence $P_m=[m]_uP_{m-1}$, obtained by inserting
+the largest entry, and reversing the order exchanges ascent and
+inversion pairs.  Multiplying the block contributions gives
+\eqref{eq:blowup}.  The inversion version has the same proof.
+\end{proof}
+
+The proposition explains the relation to ordinary chromatic functions,
+but it is not a positivity argument for the quotient.  We now work with
+the weighted target itself.
+
+\section{The positive common-history input}\label{sec:input}
+
+This section specifies the external input from
+\cite{OpenAI2026,OpenAILean2026}.  We do not reproduce the wall-crossing
+and common-history constructions.  Instead, we state exactly the
+properties used below and identify the source declarations in
+Appendix~\ref{app:sources}.  In particular, the theorem we import is not
+merely the final elementary-positivity theorem for unweighted graphs.
+
+\subsection{Quantum-torus notation}
+Let $K=\QQ((v))$, and let $L$ be a finite-rank free abelian group with
+an integral alternating bilinear form $\Omega$.  Its quantum torus over
+$K$ is the vector space with basis $\{T^a:a\in L\}$ and multiplication
+\begin{equation}\label{eq:torus}
+ T^aT^b=v^{-\Omega(a,b)}T^{a+b}.
+\end{equation}
+Only finite linear combinations of basis monomials are needed here;
+their coefficients may be Laurent series.  The coefficient of $T^R$
+in $F$ is denoted by $[T^R]F$.  Bilinearity gives
+\begin{equation}\label{eq:torus-product}
+ T^{a_1}\cdots T^{a_r}
+   =v^{-\sum_{p<q}\Omega(a_p,a_q)}T^{a_1+\cdots+a_r}.
+\end{equation}
+The source uses a unit called \decl{LaurentRay.vUnit}.  Its $k$th
+power has Laurent exponent $-k$, so that unit is $v^{-1}$ in our
+notation.  This explains the sign in~\eqref{eq:torus}; see
+Appendix~\ref{app:sources}.
+
+Let $V$ be a finite alphabet and let $\iota:\ZZ^V\hookrightarrow L$
+be an injective homomorphism.  If $\epsilon_a$ is its standard coordinate
+vector, set $u_a=\iota(\epsilon_a)$.  A subset $I\subseteq V$ is
+\emph{independent} if $\Omega(u_a,u_b)=0$ for all $a,b\in I$.
+Define
+\begin{equation}\label{eq:independent}
+ \EE_k=\sum_{\substack{I\subseteq V\text{ independent}\\|I|=k}}
+       T^{\sum_{a\in I}u_a},\qquad \EE_0=1.
+\end{equation}
+In particular, $\EE_k=0$ for $k>|V|$.  These are the
+independent-set elements of the source, with the displayed
+normalization.  A contributing set occurs with coefficient $1$;
+there is no normalization by $[k]_u!$ or by $k!$.
+
+\subsection{Triangular realizations}
+The triangular construction in~\cite{OpenAILean2026} supplies a finite
+alphabet $V=V_D$, a lattice $L=L_D$, an alternating form $\Omega$, an
+injective coordinate map $\iota$, an anchor $a_0\in L$, and a finite
+list of root vectors $\rho_j\in L$, $j\in J$.  Write
+\begin{equation}\label{eq:root-monoid}
+ \CC=\left\{\sum_{j\in J}n_j\rho_j:n_j\in\NN\right\}.
+\end{equation}
+Thus membership in $\CC$ means a nonnegative \emph{integral}
+combination, not just membership in the real cone spanned by the roots.
+
+\begin{proposition}[Triangular graph realization, OpenAI]\label{prop:embedding}
+For every natural unit interval graph $G$ on $[\ell]$, one can choose
+the triangular data above and an injection $b:[\ell]\hookrightarrow V$
+such that
+\begin{equation}\label{eq:graph-pairing}
+ \Omega(u_{b(i)},u_{b(j)})
+   =-\one_{\{ij\in E(G)\}}\qquad(i<j).
+\end{equation}
+The coordinate map $\iota$ is injective on all of $\ZZ^V$, including
+coordinates outside the embedded graph.
+\end{proposition}
+
+This is the combination of the source's
+\decl{graph_triangular_embedding}, \decl{graphVertex_pair}, and
+\decl{includeVertices_injective}.  We always choose the actual
+triangular realization supplied by that construction.  The next
+theorem is asserted for those data, not for arbitrary lattice data
+satisfying only~\eqref{eq:graph-pairing}.
+
+\begin{theorem}[Positive common histories, OpenAI]\label{thm:input}
+Fix such a triangular realization.  Let $N\in\NN$ and $R\in L$ satisfy
+\begin{equation}\label{eq:root-hyp}
+ R-Na_0\in\CC.
+\end{equation}
+There are a finite set $\HH$, profiles
+$\mu(\eta)=(\mu_0(\eta),\ldots,\mu_D(\eta))\in\NN^{D+1}$, and weights
+$W_\eta(v)\in\QQ((v))$ such that
+\begin{equation}\label{eq:profiles}
+ \sum_{j=0}^D\mu_j(\eta)=N,\qquad
+ [v^s]W_\eta(v)\in\mathbb Z_{\geq0}\quad(s\in\ZZ).
+\end{equation}
+For every $r\geq1$ and every $\alpha=(\alpha_1,\ldots,\alpha_r)\in\NN^r$
+with $\sum_a\alpha_a=N$,
+\begin{equation}\label{eq:history}
+ [T^R]\EE_{\alpha_1}\cdots\EE_{\alpha_r}
+  =\sum_{\eta\in\HH}W_\eta(v)
+       [\zz^{\mu(\eta)}]\prod_{a=1}^r e_{\alpha_a}(z_0,\ldots,z_D).
+\end{equation}
+The same set, profiles, and weights work simultaneously for all $r$
+and $\alpha$.
+\end{theorem}
+
+Here $[v^s]$ is the ordinary Laurent coefficient, allowed at any
+integer exponent.  Theorem~\ref{thm:input} initially does \emph{not}
+assert that the weights are Laurent polynomials, nor that their
+exponents have a prescribed parity.  Both facts will be proved for
+our targets in Section~\ref{sec:weighted-proof}.
+
+\begin{proof}[Identification with the cited theorem]
+The source's \decl{triangular_common_history} is quantified over every
+homogeneous elementary expression of degree $N$.  Take the expression
+whose ordered sequence of elementary indices is
+$(\alpha_1,\ldots,\alpha_r)$.  Its torus evaluation is the product on
+the left of~\eqref{eq:history}, and its ordinary evaluation is the
+product on the right.  This is the same specialization used in the
+source's unweighted \decl{graph_common_history} proof.
+
+For a representation $R-Na_0=\sum_j n_j\rho_j$, the source's root
+degree is $d=\sum_j n_j$.  Thus~\eqref{eq:root-hyp} provides exactly
+its hypothesis \decl{HasRootDegree}, with no squarefreeness condition
+on $R$.  The finite index set in~\eqref{eq:history} consists of the
+anchored leaves of the source's common history.  Their profiles have
+total degree $N$; in fact they are weakly decreasing, a property we
+will not need.  Finiteness follows from \decl{leafFintype}, and
+\decl{leafWeight_positive} gives positivity of every weight.  Finally,
+the source defines \decl{LaurentPositive.Positive} by requiring each
+coefficient to equal a natural number.  It therefore gives exactly the
+integer positivity in~\eqref{eq:profiles}.  The common-history theorem
+chooses its history before quantifying over elementary expressions,
+which gives the required uniformity in $r$ and $\alpha$.
+\end{proof}
+
+The product form~\eqref{eq:history} is enough for the rest of the
+paper.  No assertion about commutativity of arbitrary torus elements
+is needed: the products on the left retain the displayed order.
+
+\section{Multiplicity targets and weighted elementary positivity}\label{sec:weighted-proof}
+
+For $N=0$, both weighted series are $1$, so Theorem~\ref{thm:A}
+is immediate.  Fix $G$ and $\mm$ with $N>0$, and choose
+the realization from Proposition~\ref{prop:embedding}.  All history
+data in this section are attached to this one realization and one
+target.
+
+\subsection{The root-cone hypothesis for multiplicities}
+Set
+\begin{equation}\label{eq:target}
+ R_{\mm}=\sum_{i=1}^{\ell}m_i u_{b(i)}.
+\end{equation}
+
+\begin{lemma}[Admissibility of the multiplicity target]\label{lem:cone}
+The target $R_{\mm}$ satisfies
+\begin{equation}\label{eq:cone}
+ R_{\mm}-Na_0\in\CC.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Apply the source's \decl{squarefree_rootDegree} to the injection from
+a one-element set to the triangular vertex $b(i)$.  Its conclusion is
+\[
+ u_{b(i)}-a_0=\sum_{j\in J}n_{ij}\rho_j
+ \quad\text{with }n_{ij}\in\NN.
+\]
+This is the singleton case of the cited result; it imposes no
+restriction on how often that singleton may be used in a subsequent
+sum.  Therefore
+\[
+ R_{\mm}-Na_0
+  =\sum_i m_i(u_{b(i)}-a_0)
+  =\sum_{j\in J}\left(\sum_i m_i n_{ij}\right)\rho_j\in\CC.
+\]
+More explicitly, if the singleton root degree is $d_i=\sum_j n_{ij}$,
+then the displayed expression has root degree $\sum_i m_i d_i$.
+This verifies the precise hypothesis of Theorem~\ref{thm:input}.
+\end{proof}
+
+The use of a squarefree \emph{singleton} result in this lemma should
+not be confused with a squarefreeness restriction on the final target.
+The coefficients $m_i$ in~\eqref{eq:target} are arbitrary positive
+integers.
+
+\subsection{The weighted coefficient identity}
+For $r\geq1$, let $C^-_r$ be the restriction of $C^-_{G,\mm}$ to
+colors in $[r]$.  Recall the weighted edge count $A$ from~\eqref{eq:NA}.
+
+\begin{lemma}[Weighted coefficient extraction]\label{lem:kernel}
+For $\alpha\in\NN^r$ with $\sum_a\alpha_a=N$,
+\begin{equation}\label{eq:kernel}
+ [T^{R_{\mm}}]\EE_{\alpha_1}\cdots\EE_{\alpha_r}
+     =v^A[\xx^\alpha]C^-_r(\xx;v^{-2}).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Expanding~\eqref{eq:independent} chooses an independent subset
+$I_a\subseteq V$ of cardinality $\alpha_a$ for each color $a\in[r]$.
+Its total lattice exponent is
+\[
+ \sum_{a=1}^r\sum_{z\in I_a}u_z.
+\]
+Let $n_z=\#\{a:z\in I_a\}$.  Since $u_z=\iota(\epsilon_z)$ and
+$\iota$ is injective, this exponent equals $R_{\mm}$ if and only if
+\begin{equation}\label{eq:coordinate-equality}
+ n_z=\begin{cases}m_i,&z=b(i),\\0,&z\notin b([\ell]).\end{cases}
+\end{equation}
+All $n_z$ are nonnegative, so no occurrence of an outside vertex can
+cancel another coordinate.
+
+For a contributing tuple, define
+\begin{equation}\label{eq:kernel-bijection}
+ \gamma_i=\{a\in[r]:b(i)\in I_a\}.
+\end{equation}
+Equation~\eqref{eq:coordinate-equality} gives $|\gamma_i|=m_i$.
+By~\eqref{eq:graph-pairing}, independence of $I_a$ is equivalent to
+properness for vertices receiving color $a$.  Thus $\gamma$ is a proper
+set coloring, and $|I_a|=\alpha_a$ says that its monomial is
+$\xx^\alpha$.  Conversely, such a coloring gives
+$I_a=\{b(i):a\in\gamma_i\}$.  This is a bijection, including when
+some $\alpha_a=0$.  In particular, it does not order or label the
+$m_i$ occurrences at vertex $i$; no factorial factor appears.
+
+It remains to compute the torus weight.  Write
+$v_a^{\mathrm{lat}}=\sum_{z\in I_a}u_z$ for the lattice exponent of the
+$a$th factor, to distinguish it from the Laurent variable $v$.
+By~\eqref{eq:torus-product}, the coefficient contributed by the tuple
+is
+\begin{equation}\label{eq:kernel-weight}
+ v^{-\sum_{a<b}\Omega(v_a^{\mathrm{lat}},v_b^{\mathrm{lat}})}.
+\end{equation}
+Consider an edge $i<j$ and a pair of colors
+$a\in\gamma_i$, $b\in\gamma_j$.  Properness excludes $a=b$.
+If $a<b$, the ordered pairing is
+$\Omega(u_{b(i)},u_{b(j)})=-1$, contributing $+1$ to the exponent
+in~\eqref{eq:kernel-weight}.  If $a>b$, the earlier factor contributes
+$u_{b(j)}$ and the later one contributes $u_{b(i)}$; the pairing is
+$+1$, contributing $-1$ to that exponent.  Hence the edge contributes
+\[
+ m_i m_j-2\#\{(a,b)\in\gamma_i\times\gamma_j:a>b\}.
+\]
+A nonedge contributes zero by~\eqref{eq:graph-pairing}.  Two occurrences
+of the same vertex also contribute zero because $\Omega$ is
+alternating.  Summing over all edges gives
+$A-2\inv_G(\gamma)$.  Thus the term associated to $\gamma$ has weight
+$v^A(v^{-2})^{\inv_G(\gamma)}$, proving~\eqref{eq:kernel}.
+\end{proof}
+
+The lemma is the new interpretation of coefficient extraction required
+for multiplicities.  The common-history theorem itself is unchanged.
+
+\subsection{From common histories to elementary products}
+Apply Theorem~\ref{thm:input} at $R_{\mm}$, using
+Lemma~\ref{lem:cone}.  Fix the resulting $\HH$, $\mu(\eta)$, and
+$W_\eta(v)$.  These do not depend on the number of colors.
+
+\begin{lemma}[Zero-one matrix transposition]\label{lem:transpose}
+If $\alpha\in\NN^r$ and $\mu\in\NN^{D+1}$ have the same total size,
+then
+\begin{equation}\label{eq:transpose}
+ [\zz^\mu]\prod_{a=1}^r e_{\alpha_a}(z_0,\ldots,z_D)
+ = [\xx^\alpha]\prod_{j=0}^D e_{\mu_j}(x_1,\ldots,x_r).
+\end{equation}
+\end{lemma}
+\begin{proof}
+On the left, choose a subset of $\{0,\ldots,D\}$ of size $\alpha_a$
+for each factor indexed by $a$.  Its indicator vectors form an
+$r\times(D+1)$ zero-one matrix with row sums $\alpha$ and column sums
+$\mu$.  On the right, the choices give the transpose matrices, with
+column sums $\alpha$ and row sums $\mu$.  Transposition is a bijection.
+Zero entries in either profile cause no change to the argument.
+\end{proof}
+
+For each history $\eta$, let $\lambda(\eta)\vdash N$ be the partition
+obtained by sorting the nonzero entries of $\mu(\eta)$.  Combining
+\eqref{eq:history}, \eqref{eq:kernel}, and~\eqref{eq:transpose}, for
+every $\alpha$ of total degree $N$, gives
+\begin{align*}
+ v^A[\xx^\alpha]C^-_r(\xx;v^{-2})
+ &=\sum_{\eta\in\HH}W_\eta(v)
+          [\zz^{\mu(\eta)}]\prod_{a=1}^r e_{\alpha_a}(\zz)\\
+ &=\sum_{\eta\in\HH}W_\eta(v)
+          [\xx^\alpha]e_{\lambda(\eta)}(x_1,\ldots,x_r).
+\end{align*}
+Both sides concern homogeneous polynomials of degree $N$ in the color
+variables.  Equality of all coefficients therefore yields
+\begin{equation}\label{eq:laurent-expansion}
+ v^A C^-_r(\xx;v^{-2})
+    =\sum_{\eta\in\HH}W_\eta(v)e_{\lambda(\eta)}(x_1,\ldots,x_r).
+\end{equation}
+This already gives symmetry over $K$, but we still need an expansion
+over $\mathbb Z_{\geq0}[u]$, not merely over positive Laurent series.
+
+\subsection{A positive test coefficient forces finite support}
+For a Laurent series $F(v)$, let
+$\supp_v(F)=\{s\in\ZZ:[v^s]F\ne0\}$.
+
+\begin{lemma}[Support of a positive sum]\label{lem:positive-support}
+Let $F_1,\ldots,F_t\in\QQ((v))$ have nonnegative coefficients, and
+let $c_1,\ldots,c_t$ be strictly positive rational numbers.  If
+$\sum_i c_iF_i$ is supported on a finite set $E\subseteq\ZZ$, then
+$\supp_v(F_i)\subseteq E$ for every $i$.
+\end{lemma}
+\begin{proof}
+For $s\notin E$, coefficient extraction gives
+$0=\sum_i c_i[v^s]F_i$.  Each summand is nonnegative.  Since each
+$c_i>0$, all the coefficients $[v^s]F_i$ are zero.
+\end{proof}
+
+\begin{lemma}[Support and parity of history weights]\label{lem:finite}
+For every $\eta\in\HH$,
+\begin{equation}\label{eq:weight-support}
+ \supp_v(W_\eta)\subseteq E_A:=\{A-2k:0\leq k\leq A\}.
+\end{equation}
+Consequently there is a polynomial $P_\eta(u)\in\mathbb Z_{\geq0}[u]$
+of degree at most $A$ such that
+\begin{equation}\label{eq:weight-polynomial}
+ W_\eta(v)=v^A P_\eta(v^{-2}).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Take $r=N$ in~\eqref{eq:laurent-expansion} and extract the coefficient
+of $x_1\cdots x_N$.  Because $\sum_j\mu_j(\eta)=N$, the coefficient
+in the elementary product is
+\begin{equation}\label{eq:positive-test}
+ M_\eta=[x_1\cdots x_N]\prod_{j=0}^D e_{\mu_j(\eta)}(x_1,\ldots,x_N)
+       =\frac{N!}{\prod_{j=0}^D\mu_j(\eta)!}>0.
+\end{equation}
+Indeed, it counts ordered disjoint subsets of the $N$ colors with the
+specified cardinalities.  Thus
+\begin{equation}\label{eq:test-identity}
+ \sum_{\substack{\gamma\text{ proper in }[N]\\\xx^\gamma=x_1\cdots x_N}}
+       v^{A-2\inv_G(\gamma)}
+   =\sum_{\eta\in\HH}M_\eta W_\eta(v).
+\end{equation}
+The left side is a finite Laurent polynomial.  Since an edge contributes
+between $0$ and $m_i m_j$ inversions,
+$0\leq\inv_G(\gamma)\leq A$, and its support lies in $E_A$.
+All Laurent coefficients of each $W_\eta$ are nonnegative integers by
+Theorem~\ref{thm:input}.  Apply Lemma~\ref{lem:positive-support}, using
+the strict positivity of~\eqref{eq:positive-test}, to
+obtain~\eqref{eq:weight-support}.
+
+Set
+\begin{equation}\label{eq:Peta}
+ P_\eta(u)=\sum_{k=0}^A [v^{A-2k}]W_\eta(v)\,u^k.
+\end{equation}
+Its coefficients are nonnegative integers.  The support statement says
+that these are all the coefficients of $W_\eta$, which proves
+\eqref{eq:weight-polynomial}.
+\end{proof}
+
+The test coefficient in this argument is squarefree in the \emph{color}
+variables.  It does not make the lattice target $R_{\mm}$ squarefree:
+a vertex of weight $m_i$ still receives $m_i$ distinct colors.  The two
+coefficient extractions serve different purposes and are compatible.
+The same positive-support principle occurs in the unweighted source
+argument; the proof above gives its complete weighted form.
+
+\subsection{Completion of the weighted theorem}
+Substitute~\eqref{eq:weight-polynomial} into
+\eqref{eq:laurent-expansion} and cancel the invertible monomial $v^A$:
+\[
+ C^-_r(\xx;v^{-2})
+      =\sum_{\eta\in\HH}P_\eta(v^{-2})
+                      e_{\lambda(\eta)}(x_1,\ldots,x_r).
+\]
+The substitution homomorphism $\ZZ[u]\to\QQ((v))$, $u\mapsto v^{-2}$,
+is injective: distinct powers of $u$ map to distinct Laurent powers.
+Coefficientwise in the color variables, the preceding identity gives
+\begin{equation}\label{eq:positive-finite}
+ C^-_r(\xx;u)
+     =\sum_{\eta\in\HH}P_\eta(u)e_{\lambda(\eta)}(x_1,\ldots,x_r).
+\end{equation}
+The right side uses the same history polynomials for every $r$.
+The restrictions are compatible under $x_r=0$, so passage to symmetric
+functions gives
+\begin{equation}\label{eq:weighted-expansion}
+ C^-_{G,\mm}(\xx;u)
+   =\sum_{\lambda\vdash N}B_{G,\mm,\lambda}(u)e_\lambda(\xx),
+\end{equation}
+where
+\begin{equation}\label{eq:history-coeff}
+ B_{G,\mm,\lambda}(u)
+  =\sum_{\substack{\eta\in\HH\\\lambda(\eta)=\lambda}}
+      \sum_{k=0}^A[v^{A-2k}]W_\eta(v)\,u^k
+      \in\mathbb Z_{\geq0}[u].
+\end{equation}
+This proves elementary positivity, integrality, symmetry, and the degree
+bound.  The history family is not asserted to be canonical, but the
+polynomials $B_{G,\mm,\lambda}$ are canonical by uniqueness of the
+elementary expansion.  Formula~\eqref{eq:history-coeff} is a positive
+history formula, not a claim of a new tableau or permutation formula
+for these coefficients.
+
+It remains to relate the orientations and prove palindromicity.
+For a proper set coloring in $[r]$, replace every color $a$ by $r+1-a$.
+This is an involution that interchanges ascents and inversions and
+reverses the color variables.  Hence
+\[
+ C^+_r(x_1,\ldots,x_r;u)=C^-_r(x_r,\ldots,x_1;u).
+\]
+The symmetry just proved makes the right side equal to
+$C^-_r(x_1,\ldots,x_r;u)$.  Thus $C^+=C^-$ in the stable limit.
+On each edge, equality of colors is prohibited, so
+\begin{equation}\label{eq:asc-inv}
+ \asc_G(\gamma)+\inv_G(\gamma)=A.
+\end{equation}
+Termwise, it follows that
+\[
+ C^+_{G,\mm}(\xx;u)=u^A C^-_{G,\mm}(\xx;u^{-1}).
+\]
+Comparing elementary coefficients in~\eqref{eq:weighted-expansion}
+now proves~\eqref{eq:thmA-pal}.  This completes the proof of
+Theorem~\ref{thm:A}.
+
+\begin{remark}\label{rem:no-division}
+The only factor cancelled in the positivity argument is the monomial
+$v^A$.  No quantum factorial, ordinary factorial, or polynomial with
+more than one nonzero coefficient is cancelled from a positive
+expansion.  The factorials in~\eqref{eq:positive-test} are merely the
+strictly positive scalar test coefficients; they are not used to
+divide history weights.
+\end{remark}
+
+\section{Dyck positivity and the classical specialization}\label{sec:dyck-proof}
+
+\subsection{The dual series}
+Apply Theorem~\ref{thm:A} to the natural unit interval graph
+$G_{S,\tau}$ of Lemma~\ref{lem:interval}, with weights
+$\mm=(m_1,\ldots,m_\ell)$.  Its weighted edge count is $A_\tau(S)$.
+By Proposition~\ref{prop:bijection},
+\begin{equation}\label{eq:dual-positive}
+ \DD^*_{S,\tau}(\xx;u)
+   =u^{\beta_\tau(S)}
+       \sum_{\lambda\vdash N}B_{G_{S,\tau},\mm,\lambda}(u)e_\lambda(\xx).
+\end{equation}
+This proves symmetry and the dual expansion in Theorem~\ref{thm:B}.
+Explicitly, we may take
+\begin{equation}\label{eq:a-history}
+ a_{\lambda,k}(S,\tau)
+  =[u^k]B_{G_{S,\tau},\mm,\lambda}(u)
+  =\sum_{\substack{\eta\in\HH\\\lambda(\eta)=\lambda}}
+       [v^{A_\tau(S)-2k}]W_\eta(v).
+\end{equation}
+The histories here are chosen for $G_{S,\tau}$ and $R_{\mm}$ as in
+Section~\ref{sec:weighted-proof}.  Formula~\eqref{eq:a-history} gives
+nonnegative integers and proves the asserted support and
+palindromicity of these coefficients.
+
+\subsection{Complementary factor boundaries}
+To pass to the affine series, we prove the involution relation for
+all integer steps.  This also avoids assuming affine symmetry in
+advance.  The argument is the fixed-word complement argument appearing
+in the step-one setting in~\cite[Corollary~3.20]{Hawkes2026}.
+
+For $D\subseteq[N-1]$, define the fundamental quasisymmetric function
+\begin{equation}\label{eq:fundamental}
+ F_{N,D}(\xx)
+  =\sum_{\substack{1\leq a_1\leq\cdots\leq a_N\\
+                  j\in D\ \Rightarrow\ a_j<a_{j+1}}}
+          x_{a_1}\cdots x_{a_N}.
+\end{equation}
+These functions form a basis of the degree-$N$ quasisymmetric functions.
+Let $\psi$ be the degreewise linear involution determined by
+\begin{equation}\label{eq:psi}
+ \psi(F_{N,D})=F_{N,[N-1]\setminus D}.
+\end{equation}
+On degree zero put $\psi(1)=1$.
+
+\begin{lemma}\label{lem:psi}
+The map $\psi$ preserves symmetric functions and restricts there to
+$\omega$.
+\end{lemma}
+\begin{proof}
+For a standard Young tableau $T$ in English convention, let $\Des(T)$
+consist of the integers $j$ for which $j+1$ lies in a lower row than $j$.
+Standardization of semistandard tableaux gives
+\begin{equation}\label{eq:schur-fundamental}
+ s_\lambda=\sum_{T\in\SYT(\lambda)}F_{N,\Des(T)}.
+\end{equation}
+In this standardization, entries of the same value are numbered from
+left to right, so equality is allowed exactly away from tableau
+descents; this gives~\eqref{eq:schur-fundamental} directly from the
+semistandard generating function.  For consecutive entries in a
+standard tableau, transposition complements the descent set:
+\[
+ \Des(T^{\mathsf t})=[N-1]\setminus\Des(T).
+\]
+Indeed, if $j+1$ lies in a lower row, it cannot lie strictly to the
+right of $j$: a cell on a row--column path between the two would have
+to carry an integer strictly between $j$ and $j+1$.  If it does not
+lie in a lower row, it must lie to the right.  Applying~\eqref{eq:psi}
+to~\eqref{eq:schur-fundamental} therefore gives
+$\psi(s_\lambda)=s_{\lambda'}=\omega(s_\lambda)$.  Since Schur
+functions form a basis of $\Sym_\ZZ$, the assertion follows.
+\end{proof}
+
+\begin{proposition}[The affine--dual involution]\label{prop:omega}
+For every $S$ and integer $\tau\geq0$,
+\begin{equation}\label{eq:omega-dyck}
+ \DD_{S,\tau}(\xx;u)=\omega\DD^*_{S,\tau}(\xx;u).
+\end{equation}
+The identity holds separately in each degree of $u$.
+\end{proposition}
+\begin{proof}
+Fix $w\in\WW(S)$ and write
+\begin{align*}
+ D^*_\tau(w)&=\{j\in[N-1]:w_{j+1}\leq w_j+\tau\},\\
+ D_\tau(w)&=\{j\in[N-1]:w_{j+1}>w_j+\tau\}.
+\end{align*}
+A factorization with concatenation $w$ is equivalently a weakly
+increasing sequence $(a_1,\ldots,a_N)$ of factor labels.  Whenever
+$a_j=a_{j+1}$, the pair $(w_j,w_{j+1})$ lies within one factor and
+must satisfy its local inequality.  Thus dual factorizations force
+a strict increase exactly at the positions in $D^*_\tau(w)$, while
+affine factorizations force one exactly at the positions in
+$D_\tau(w)$.  Additional strict increases are allowed in either case.
+Empty factors correspond to skipped labels, so no further choices
+or multiplicities are missing.  The fixed-word generating functions
+are consequently $F_{N,D^*_\tau(w)}$ and $F_{N,D_\tau(w)}$.
+
+The two boundary sets are complements.  Since the exponent
+$\dinv_\tau(w)$ depends on the concatenated word alone, we obtain
+\begin{align*}
+ \DD^*_{S,\tau}(\xx;u)
+   &=\sum_{w\in\WW(S)}u^{\dinv_\tau(w)}F_{N,D^*_\tau(w)}(\xx),\\
+ \DD_{S,\tau}(\xx;u)
+   &=\sum_{w\in\WW(S)}u^{\dinv_\tau(w)}F_{N,D_\tau(w)}(\xx)
+     =\psi\DD^*_{S,\tau}(\xx;u).
+\end{align*}
+The dual series is symmetric by~\eqref{eq:dual-positive}, so
+Lemma~\ref{lem:psi} replaces $\psi$ by $\omega$.  This proves
+\eqref{eq:omega-dyck}, including its coefficientwise version.
+For $S=\varnothing$, both sides are $1$.
+\end{proof}
+
+Applying $\omega(e_\lambda)=h_\lambda$ to~\eqref{eq:dual-positive}
+gives the affine expansion with precisely the same integers
+\eqref{eq:a-history}.  This completes the proof of
+Theorem~\ref{thm:B}.
+
+\subsection{Hawkes's original functions}
+We now identify the step-one specialization with the exact functions
+in~\cite{Hawkes2026}.  In Definition~2.1 of that paper, the statistic is
+\begin{equation}\label{eq:hawkes-di}
+ \di(w)=\#\{p<q:w_p=w_q+1\}.
+\end{equation}
+Definitions~2.2--2.5 use the affine and dual factor inequalities of
+Definition~\ref{def:words} at $\tau=1$.  In particular, equal pairs
+are not counted by~\eqref{eq:hawkes-di}.  Put
+\begin{equation}\label{eq:kappa}
+ \kappa(S)=\sum_i\binom{m_i}{2}.
+\end{equation}
+Since all entries are integers, $0<w_p-w_q\leq1$ is equivalent to
+$w_p=w_q+1$.  Also, the distinct-value terms in $\beta_1(S)$ all
+vanish.  Lemma~\ref{lem:static} therefore gives
+\begin{equation}\label{eq:classical-shift}
+ \beta_1(S)=\kappa(S),\qquad
+ \dinv_1(w)=\kappa(S)+\di(w).
+\end{equation}
+After renaming Hawkes's variable $x_{a-1}$ as our $x_a$, the fixed-degree
+identifications are
+\begin{align}
+ \DS^*_{\mathrm H}(S,d;\xx)
+    &=\DS^{*(1)}(S,d+\kappa(S);\xx),\label{eq:classical-dual}\\
+ \DS_{\mathrm H}(S,d;\xx)
+    &=\DS^{(1)}(S,d+\kappa(S);\xx),\label{eq:classical-affine}
+\end{align}
+where the subscript $\mathrm H$ denotes the original notation in
+\cite[Definition~2.5]{Hawkes2026}, not a different family.
+
+\begin{corollary}[Positivity of the original Dyck functions]\label{cor:classical}
+For every finite multiset $S$ and every $d\geq0$,
+\begin{equation}\label{eq:classical-expansion}
+ \DS^*_{\mathrm H}(S,d;\xx)
+    =\sum_{\lambda\vdash N}a_{\lambda,d}(S,1)e_\lambda(\xx),
+ \qquad
+ \DS_{\mathrm H}(S,d;\xx)
+    =\sum_{\lambda\vdash N}a_{\lambda,d}(S,1)h_\lambda(\xx),
+\end{equation}
+where coefficients outside $0\leq d\leq A_1(S)$ are zero.  All these
+coefficients are nonnegative integers, and
+$a_{\lambda,d}(S,1)=a_{\lambda,A_1(S)-d}(S,1)$.
+\end{corollary}
+\begin{proof}
+Insert~\eqref{eq:classical-dual}--\eqref{eq:classical-affine} into
+Theorem~\ref{thm:B} and use $\beta_1(S)=\kappa(S)$.
+\end{proof}
+
+Thus the original generating series equal $u^{-\kappa(S)}\DD^*_{S,1}$
+and $u^{-\kappa(S)}\DD_{S,1}$.  These expressions are polynomials in
+$u$ by the established lower degree bound.  The removal of this
+monomial shift is unrelated to, and does not entail, division by a
+quantum factorial.
+
+\section{Consequences and examples}\label{sec:examples}
+
+\subsection{Generalized Hessenberg chromatic functions}
+Theorem~\ref{thm:A} also has a direct formulation in the language
+of~\cite{KiemLee2024}.  Let
+\[
+ P=\{M_1<\cdots<M_\ell=N\},\qquad M_0=0,
+\]
+and let $H:P\to P$ be weakly increasing and extensive.  This is a
+generalized Hessenberg function.  Define
+\begin{equation}\label{eq:generalized-dictionary}
+ m_i=M_i-M_{i-1},\qquad H(M_i)=M_{h(i)}.
+\end{equation}
+Then $h:[\ell]\to[\ell]$ is weakly increasing and extensive.  Conversely,
+any $h$ and positive weights determine $P$ and $H$ in this way.
+The weighted graph in~\cite[Definitions~4.1--4.3]{KiemLee2024} joins
+$M_i$ to $M_j$ for $M_i<M_j\leq H(M_i)$ and gives $M_i$ the weight
+$m_i$.  Its coloring sets, monomial, and ascent count are exactly
+those defining $C^+_{G,\mm}$.  Consequently,
+\begin{equation}\label{eq:generalized-csf}
+ \csf_u(H)=C^+_{G,\mm}(\xx;u).
+\end{equation}
+
+\begin{corollary}\label{cor:generalized}
+The generalized Hessenberg chromatic function $\csf_u(H)$ is
+coefficientwise $e$-positive for every generalized Hessenberg function
+$H$.  The equivariant Poincar\'e polynomial $\mathcal F(H)$ in the
+normalization of~\cite{KiemLee2024} is coefficientwise $h$-positive.
+\end{corollary}
+\begin{proof}
+The first assertion follows from~\eqref{eq:generalized-csf} and
+Theorem~\ref{thm:A}.  The identity
+$\csf_u(H)=\omega\mathcal F(H)$ of
+\cite[Theorem~4.6]{KiemLee2024} gives the second.
+\end{proof}
+
+This answers the positivity question posed in
+\cite[Question~4.9]{KiemLee2024}, with the common-history input specified
+in Section~\ref{sec:input}.  No geometric result beyond the cited
+character identity is needed for this consequence.
+
+\subsection{Boundary cases}
+For the empty multiset, both series are $1$.  For $\tau=0$, the value
+graph has no edges and both $A_0(S)$ and $\beta_0(S)$ vanish.  Each
+vertex chooses its color set independently, giving
+\begin{equation}\label{eq:step-zero}
+ \DD^*_{S,0}=\prod_i e_{m_i},\qquad
+ \DD_{S,0}=\prod_i h_{m_i}.
+\end{equation}
+For a single value repeated $m$ times, the graph also has no edges,
+but the equal-pair shift remains:
+\begin{equation}\label{eq:one-value}
+ \DD^*_{c^m,\tau}=u^{\tau\binom m2}e_m,\qquad
+ \DD_{c^m,\tau}=u^{\tau\binom m2}h_m.
+\end{equation}
+These formulas in particular distinguish the shift from the
+weighted-edge statistic.
+
+At the opposite extreme, if $c_\ell-c_1\leq\tau$, the value graph
+is complete.  Every color used in a proper set coloring is then used
+once.  Order these $N$ colors increasingly, and record the vertex
+receiving each one.  The resulting word has content
+$1^{m_1}\cdots\ell^{m_\ell}$, and its ordinary inversion number equals
+$\inv_G(\gamma)$.  Hence
+\begin{equation}\label{eq:complete}
+ C^-_{G,\mm}(\xx;u)
+   =\begin{bmatrix}N\\m_1,\ldots,m_\ell\end{bmatrix}_u e_N(\xx),
+\end{equation}
+where the Gaussian multinomial is defined here by the inversion
+generating polynomial of these multiset words.  This directly proves
+its nonnegative coefficients.  Its familiar factorial quotient is an
+identity for that polynomial, not a positivity inference used in
+our proof.
+
+\subsection{A repeated-value example at two steps}
+Let
+\[
+ S=\{0,0,1,2\},\qquad \mm=(2,1,1),\qquad N=4.
+\]
+At $\tau=1$, the value graph is the path $0$--$1$--$2$, with
+$h=(2,3,3)$, $A_1(S)=3$, and $\beta_1(S)=1$.  Its weighted function is
+\begin{equation}\label{eq:example-path}
+ C^-_{G,\mm}
+   =(1+u+u^2+u^3)e_4+(u+u^2)e_{3,1}.
+\end{equation}
+For a direct check, the only monomial types are $(2,1,1)$ and
+$(1,1,1,1)$.  Enumerating proper color sets gives
+\[
+ [x_1^2x_2x_3]C^-=u+u^2,\qquad
+ [x_1x_2x_3x_4]C^-=1+5u+5u^2+u^3.
+\]
+Now $e_{3,1}=m_{2,1,1}+4m_{1,1,1,1}$ and
+$e_4=m_{1,1,1,1}$, which gives~\eqref{eq:example-path}.
+Symmetry is known from Theorem~\ref{thm:A}; alternatively, one may
+check each ordered placement of the squared variable directly.
+The step-one dual series is
+\begin{equation}\label{eq:example-dual}
+ \DD^*_{S,1}
+   =u e_4+u^2(e_4+e_{3,1})+u^3(e_4+e_{3,1})+u^4e_4.
+\end{equation}
+The affine series replaces every $e$ by $h$.  Hawkes's original
+series in this example are obtained by removing the leading factor
+$u$, since $\kappa(S)=1$.
+
+At $\tau=2$, the additional edge between the levels $0$ and $2$
+makes the graph complete.  We have
+\[
+ A_2(S)=5,\qquad
+ \beta_2(S)=2+2+1=5.
+\]
+In the latter expression the three terms come from the equal pair,
+the pairs of values $0,1$, and the pair of values $1,2$.
+Equation~\eqref{eq:complete} gives
+\begin{align}
+ C^-_{G,\mm}
+   &=[3]_u[4]_u e_4
+     =(1+2u+3u^2+3u^3+2u^4+u^5)e_4,\label{eq:example-complete}\\
+ \DD^*_{S,2}
+   &=u^5(1+2u+3u^2+3u^3+2u^4+u^5)e_4.\label{eq:example-two}
+\end{align}
+Again the affine series has the same coefficient polynomial with
+$h_4$ in place of $e_4$.  This example shows why the step-$\tau$
+value graph must include every pair of levels at distance at most
+$\tau$, not just consecutive occupied levels.
+
+\subsection{Scope of the conclusions}
+The history formula proves nonnegative integrality and the argument
+with color reversal proves palindromicity.  Neither assertion alone
+implies unimodality or log-concavity of the elementary coefficient
+polynomials.  In particular, no answer to the stronger
+log-concavity question in~\cite[Question~4.10]{KiemLee2024} is claimed
+here.  Likewise, the positivity theorem applies to Hawkes's functions
+used in $q,t$-Catalan theory, but it does not by itself assert a new
+coefficient formula for a separate Catalan specialization.  The main
+new mechanism is the multiplicity target in the common-history
+identity, together with the positive finite-support extraction.
+
+\appendix
+\section{Correspondence with the cited formalization}\label{app:sources}
+
+The external input is cited at the fixed revision
+\href{https://github.com/openai/math/commit/fd4aeeb}{\texttt{fd4aeeb}}
+of the OpenAI mathematics repository~\cite{OpenAILean2026}.
+The manuscript~\cite{OpenAI2026} supplies the
+broader argument; the exact intermediate results used here are
+identified below by module and declaration.  All paths are relative
+to \nolinkurl{lean/OAI/Combinatorics/Chromatic/}.  The displayed module
+names are hyperlinks to that revision, rather than to a mutable
+branch.
+
+\subsection{Graph realization and the multiplicity target}
+The module
+\sourcefile{Walls/GraphTriangularEmbedding.lean}{Walls/GraphTriangularEmbedding.lean}
+contains \decl{graph_triangular_embedding}.  It embeds the natural
+unit interval graph in a triangular alphabet with the prescribed
+pairings.  The passage to the extended lattice and the negative-edge
+sign are expressed by \decl{graphVertex_pair} in
+\sourcefile{Histories/GraphCommonHistory.lean}{Histories/GraphCommonHistory.lean}.
+The vertex-coordinate inclusion is injective; the source uses
+\decl{includeVertices_injective} when extracting graph coefficients.
+This is the inclusion of the vertex summand into the extended lattice,
+so no linear relation among the vertex-coordinate vectors is introduced
+by the anchor coordinates.
+
+The same graph-history module contains \decl{squarefree_rootDegree}.
+Its domain is an arbitrary injection from a finite set to the
+triangular vertices.  Taking the domain to have one element gives
+$u_{b(i)}-a_0\in\CC$.  Lemma~\ref{lem:cone} then takes an integral
+linear combination with coefficients $m_i$.  The source's theorem
+need not be modified or applied to a noninjective map.  This singleton
+use is the exact justification for the multiplicity target.
+
+\subsection{Independent elements and the Laurent parameter}
+The definitions \decl{IsIndependent}, \decl{setMonomial}, and
+\decl{independentElement} are in
+\sourcefile{QuantumTorus/IndependentSetElements.lean}{QuantumTorus/IndependentSetElements.lean}.
+They give precisely the unnormalized independent-set sum
+\eqref{eq:independent}.  In
+\sourcefile{Walls/HNTorusFactor.lean}{Walls/HNTorusFactor.lean},
+\decl{LaurentRay.vUnit_zpow} identifies the $k$th power of the
+parameter unit with the Hahn monomial at exponent $-k$.
+Thus the source's parameter unit is our $v^{-1}$, and a torus pairing
+$\Omega(a,b)$ contributes $v^{-\Omega(a,b)}$.  This sign convention
+is responsible for $v^{A-2\inv}$ rather than $v^{2\inv-A}$ in
+Lemma~\ref{lem:kernel}.
+
+\subsection{The common history and its positivity}
+The central declaration is \decl{triangular_common_history} in
+\sourcefile{Histories/TriangularCommonHistory.lean}{Histories/TriangularCommonHistory.lean}.
+Its parameters include a homogeneous degree, a root degree, and an
+arbitrary lattice target satisfying \decl{HasRootDegree} after
+subtracting the anchor base.  Its conclusion chooses one history
+and then quantifies over homogeneous elementary expressions.
+The ordered-product specialization in Theorem~\ref{thm:input} uses
+\decl{ElementaryExpr.sequence}; the same specialization is visible
+in the proof of \decl{graph_common_history} in the graph-history
+module.  Nothing in this step imposes a squarefree target.
+
+The histories end at anchored leaves.  Their profile degree is
+recorded by \decl{leafProfile_degree}; the dominant-profile property
+is stronger than the nonnegativity and total-degree conditions we
+need.  In
+\sourcefile{Histories/CommonHistoryLeaves.lean}{Histories/CommonHistoryLeaves.lean},
+\decl{leafFintype} gives finiteness and \decl{leafWeight_positive}
+gives positivity of the product of branch weights for each leaf.
+Finally,
+\sourcefile{Walls/RootProducts.lean}{Walls/RootProducts.lean}
+defines \decl{LaurentPositive.NatCoeff} to mean equality with a
+natural number and \decl{LaurentPositive.Positive} coefficientwise
+using this predicate.  It is therefore integer positivity, not just
+an order condition over the rationals.
+
+\subsection{Notation and scope of the formalized input}
+The total coloring degree $N$ in this paper is the homogeneous degree
+of an elementary expression.  It is not the number $\ell$ of weighted
+vertices, nor the triangular size $D$.  The source's triangular base
+at degree $N$ is our $Na_0$, and its root-degree condition is
+membership in the integral monoid~\eqref{eq:root-monoid}.  A leaf's
+anchor-coordinate profile is our $\mu(\eta)$.  The target used in the
+new proof is $R_{\mm}$, whereas the unweighted graph extraction uses
+$\sum_i u_{b(i)}$.
+
+These identifications delimit the proof dependency.  The graph
+realization and positive common-history statements are imported from
+the cited source; the multiplicity coefficient identity, its finite
+support argument, and the Dyck applications are proved in this paper.
+Only the imported graph-realization and common-history machinery is
+used as formalized input.  The new weighted extension and the Dyck
+applications are proved here in ordinary mathematical form; no Lean
+formalization of those extensions is claimed.
+
+\section{Exact computational checks}\label{app:checks}
+
+Two finite enumerations provide independent checks of the formulas,
+including the distinction between ordered monomials and their symmetric
+specializations.  All arithmetic is integral, except for exact rational
+arithmetic in the change-of-basis calculation.  None of these computations
+is used in the proofs.
+
+\subsection{Weighted natural unit interval graphs}
+For a fixed $G$, weight vector $\mm$, and composition
+$\alpha=(\alpha_1,\ldots,\alpha_r)$ of $N$, the coefficient
+$[\xx^\alpha]C^-_{G,\mm}(\xx;u)$ can be computed by processing the colors
+in increasing order.  Let $P_a(\mathbf b)$ record the partial colorings
+using colors $1,\ldots,a$, with vertex $i$ having received $b_i$ colors.
+Here $0\leq b_i\leq m_i$, and $P_0(\mathbf b)$ is $1$ for
+$\mathbf b=\mathbf0$ and $0$ otherwise.  For an independent set $I$,
+write $\one_I$ for its incidence vector and put
+\[
+ \Delta_G(\mathbf b,I)
+  =\sum_{\substack{i<j\\ij\in E(G)}}\one_{\{i\in I\}}b_j.
+\]
+The recurrence is
+\begin{equation}\label{eq:computational-recurrence}
+ P_a(\mathbf b)
+  =\sum_{\substack{I\subseteq[\ell]\text{ independent}\\
+                   |I|=\alpha_a,\ \one_I\leq\mathbf b}}
+       u^{\Delta_G(\mathbf b-\one_I,I)}
+       P_{a-1}(\mathbf b-\one_I).
+\end{equation}
+The exponent counts precisely the new inversions between color $a$ at
+a lower-index vertex and an earlier color at an adjacent higher-index
+vertex.  Thus the desired coefficient is $P_r(\mm)$, without any
+assumption of symmetry.
+
+We enumerated all weakly increasing extensive functions $h$ on $[\ell]$
+and all positive weight compositions $(m_1,\ldots,m_\ell)$ with total
+weight at most six.  The number of weighted cases at each total weight is
+\begin{center}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Total weight $N$ & 1 & 2 & 3 & 4 & 5 & 6 & Total\\
+\midrule
+Weighted graphs & 1 & 3 & 10 & 36 & 137 & 543 & 730\\
+\bottomrule
+\end{tabular}
+\end{center}
+For each degree, the elementary-to-monomial change-of-basis matrix was
+computed by counting zero-one matrices.  Exact inversion then gave
+candidate elementary coefficients.  These candidates were checked against
+every positive composition of that degree, not only against the partition
+representatives used to solve the system.  Zero exponents merely skip
+colors and do not affect their comparisons.  The tests also checked
+coefficientwise nonnegativity, palindromicity with the exact value of $A$,
+and the clique blowup identity.
+
+The enumeration verified 19,903 ordered monomial expansions and 6,857
+nonzero partition--statistic coefficient positions across the 730 cases.
+No discrepancy was found.
+
+\subsection{Direct \texorpdfstring{step-$\tau$}{step-tau} factorizations}
+A separate enumeration considered multisets with entries in
+$\{0,1,2,3\}$, total size at most five, and
+$\tau\in\{0,1,2,3\}$.  For each distinct multiset word, the pair statistic
+\eqref{eq:pair-stat} was evaluated directly and compared with the static
+decomposition.  All weakly increasing factor labels in four color
+variables were then enumerated.  The affine and dual inequalities were
+checked separately, and the resulting ordered monomials were weighted
+by the directly computed statistic.
+
+These sums were compared with the predicted elementary and homogeneous
+expansions.  The homogeneous products were expanded by enumerating weak
+compositions for each factor $h_k$; the affine comparison therefore did
+not assume the involution identity.  This computation checked 500
+multiset--step cases, 5,456 word statistics, and 271,040 candidate
+word--factor-label combinations.  The dual and affine comparisons
+comprised 39,016 ordered monomial polynomial checks.  No discrepancy was
+found, including in the repeated-value grading shifts.
+
+\begin{thebibliography}{Ope26b}
+
+\bibitem[Haw26]{Hawkes2026}
+Graham Hawkes, \emph{Dyck symmetric functions and applications to
+$q,t$-Catalan polynomials}, preprint, 2026,
+\href{https://arxiv.org/abs/2605.13003v1}{arXiv:2605.13003v1}.
+
+\bibitem[Hwa24]{Hwang2024}
+Byung-Hak Hwang, \emph{Chromatic quasisymmetric functions and
+noncommutative $P$-symmetric functions},
+Transactions of the American Mathematical Society
+\textbf{377} (2024), no.~4, 2855--2896,
+\href{https://doi.org/10.1090/tran/9096}{doi:10.1090/tran/9096};
+\href{https://arxiv.org/abs/2208.09857v2}{arXiv:2208.09857v2}.
+
+\bibitem[KL24]{KiemLee2024}
+Young-Hoon Kiem and Donggun Lee, \emph{Birational geometry of generalized
+Hessenberg varieties and the generalized Shareshian--Wachs conjecture},
+Journal of Combinatorial Theory, Series A \textbf{206} (2024),
+article 105884,
+\href{https://doi.org/10.1016/j.jcta.2024.105884}{doi:10.1016/j.jcta.2024.105884};
+\href{https://arxiv.org/abs/2208.12282v3}{arXiv:2208.12282v3}.
+
+\bibitem[Ope26a]{OpenAI2026}
+OpenAI, \emph{Elementary positivity of chromatic quasisymmetric
+functions}, OpenAI Math Release preprint, September~24, 2026,
+\href{https://github.com/openai/math/blob/fd4aeeb/preprints/Elementary-Positivity-of-Chromatic-Quasisymmetric-Functions-September-24-2026/paper.pdf}{OpenAI mathematics repository}.
+
+\bibitem[Ope26b]{OpenAILean2026}
+OpenAI, \emph{Formalization accompanying elementary positivity of
+chromatic quasisymmetric functions},
+\href{https://github.com/openai/math/tree/fd4aeeb/lean/OAI/Combinatorics/Chromatic}{OpenAI mathematics repository, Lean source},
+2026, revision
+\href{https://github.com/openai/math/commit/fd4aeeb}{\texttt{fd4aeeb}}.
+
+\bibitem[SW16]{ShareshianWachs2016}
+John Shareshian and Michelle~L. Wachs, \emph{Chromatic quasisymmetric
+functions}, Advances in Mathematics \textbf{295} (2016), 497--551,
+\href{https://arxiv.org/abs/1405.4629v2}{arXiv:1405.4629v2}.
+
+\end{thebibliography}
+
+\end{document}
