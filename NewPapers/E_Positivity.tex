@@ -1,0 +1,612 @@
+% Self-contained source: no external .bib file or figures are required.
+% Compile twice with: pdflatex "kiem_lee_e_positivity(1).tex"
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Elementary positivity for vertex multicolorings and dual Dyck functions},
+  pdfsubject={Weighted chromatic positivity and its applications to generalized Hessenberg and step-tau dual Dyck symmetric functions},
+  pdfauthor={}
+}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\NN}{\mathbb Z_{\geq 0}}
+\newcommand{\Npos}{\mathbb Z_{>0}}
+\newcommand{\xx}{\mathbf x}
+\newcommand{\avec}{\mathbf a}
+\newcommand{\bvec}{\mathbf b}
+\newcommand{\cvec}{\mathbf c}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\cA}{\mathcal A}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\csf}{csf}
+\DeclareMathOperator{\di}{di}
+\DeclareMathOperator{\dinv}{dinv}
+\DeclareMathOperator{\DS}{DS}
+\DeclareMathOperator{\supp}{supp}
+\numberwithin{equation}{section}
+\setlength{\emergencystretch}{1.5em}
+\setlength{\parskip}{2pt}
+\setlength{\parindent}{1.2em}
+
+\begin{document}
+\begin{center}
+  {\Large\bfseries Elementary positivity for vertex multicolorings\\
+  and dual Dyck functions}\par
+\end{center}
+
+\begin{abstract}
+We deduce coefficientwise elementary positivity for vertex multicolorings
+of natural unit interval graphs from the intermediate monomial-positivity
+results in OpenAI's chromatic-positivity preprint. A vertex of multiplicity
+$a_i$ receives a set of $a_i$ distinct colors. Extracting arbitrary
+nonnegative vertex exponents, rather than only squarefree exponents,
+extends the chromatic argument to these multiplicities without division
+by quantum factorials. This yields positivity for generalized Hessenberg
+chromatic functions. In a second part, a direct correspondence between
+step-$\tau$ dual Dyck factorizations and multicolorings proves elementary
+positivity in each statistic degree for every integer $\tau\geq0$.
+An explicit grading shift recovers Hawkes's original dual Dyck symmetric
+functions at step one. All positivity conclusions use the stated external
+input.
+\end{abstract}
+
+\section{Introduction}
+Elementary positivity asks for a symmetric function to be a nonnegative
+linear combination of products of elementary symmetric functions. For
+chromatic functions refined by an ascent statistic, the coefficientwise
+question requires the elementary coefficients to be polynomials with
+nonnegative integer coefficients. We consider the multicoloring version:
+each vertex receives a prescribed number of distinct colors, and adjacent
+vertices receive disjoint color sets. This construction appears in
+Hwang~\cite{Hwang} and Kiem--Lee~\cite{KL}; the multiplicities specify
+color-set cardinalities rather than powers of a single color.
+
+The first part proves elementary positivity for every multiplicity vector
+on a natural unit interval graph (Theorem~\ref{thm:main}). The central
+observation is that the monomial-positivity results of~\cite{OAI} apply to
+all nonnegative vertex exponents. Restriction from a triangular graph and
+the elementary--monomial Cauchy identity then give the weighted theorem.
+This is a deduction from the specified intermediate results of~\cite{OAI},
+not an independent proof of chromatic positivity. The generalized
+Hessenberg functions of Kiem--Lee are one application, giving an
+affirmative answer to their Question~4.9 under the same input
+(Corollary~\ref{cor:KL}).
+
+The second part extends the dual Dyck factor conditions of
+Hawkes~\cite{Hawkes} to every integer step $\tau\geq0$. These
+factorizations encode multicolorings of the graph joining distinct
+integer values at distance at most $\tau$. Repeated values become vertex
+multiplicities, and the statistic is a constant shift of the complement
+of the weighted ascent statistic. Theorem~\ref{thm:dyck} gives elementary
+positivity in each statistic degree. At step one, removing the
+equal-pair shift recovers Hawkes's original functions
+(Corollary~\ref{cor:classical}), strengthening their Schur positivity
+in~\cite[Corollary~3.19]{Hawkes}.
+
+The multiplicity step cannot be obtained simply by dividing an unweighted
+positive expansion. Replacing each vertex by a clique of its multiplicity
+introduces a factor $\prod_i[a_i]_q!$, where
+$[a]_q!=\prod_{j=1}^a(1+q+\cdots+q^{j-1})$; see
+\cite[Remark~4.4]{KL}. Division by such a factor need not preserve
+coefficientwise positivity, as $(1+q)(1-q+q^2)=1+q^3$ illustrates.
+The coefficient extraction below counts color sets directly.
+
+\section{Definitions and conventions}\label{sec:definitions}
+Let $\Lambda_{\Z}=\Z[e_1,e_2,\ldots]$ be the ring of symmetric functions in
+$\xx=(x_1,x_2,\ldots)$, where
+$e_k(\xx)=\sum_{c_1<\cdots<c_k}x_{c_1}\cdots x_{c_k}$ and $e_0=1$.
+For a partition $\lambda$, write $|\lambda|$ for its size,
+$\ell(\lambda)$ for its length, $e_\lambda=\prod_j e_{\lambda_j}$,
+and $m_\lambda$ for the sum of distinct monomials with positive exponent
+multiset $\lambda$. A homogeneous symmetric function is
+\emph{$e$-positive over $\NN[q]$} when its $e_\lambda$-coefficients lie in
+$\NN[q]$.
+
+An ordered graph $G$ on $[r]=\{1,\ldots,r\}$ is a \emph{natural unit
+interval graph} if, for a weakly increasing map $g:[r]\to[r]$ with
+$g(i)\geq i$, its edges are $\{i,j\}$ with $i<j\leq g(i)$.
+For $\avec\in\NN^r$, set
+\begin{equation}\label{eq:NM}
+ N=|\avec|:=\sum_i a_i,
+ \qquad M=M_G(\avec):=\sum_{\substack{i<j\\\{i,j\}\in E(G)}}a_i a_j.
+\end{equation}
+A \emph{proper multicoloring of multiplicity $\avec$} assigns a finite set
+$C_i\subseteq\Npos$ to each vertex, with $|C_i|=a_i$ and
+$C_i\cap C_j=\varnothing$ on every edge. Define
+\begin{equation}\label{eq:weighted-function}
+ \begin{aligned}
+ \asc_G(C)&=\sum_{\substack{i<j\\\{i,j\}\in E(G)}}
+       \#\{(c,d)\in C_i\times C_j:c<d\},\\
+ X_{G,\avec}(\xx;q)&=\sum_{C\text{ proper}}q^{\asc_G(C)}
+       \prod_{i=1}^r\prod_{c\in C_i}x_c.
+ \end{aligned}
+\end{equation}
+
+Put $R=\Z[v,v^{-1}]$. The \emph{nonnegative-exponent graph algebra} is
+$\cA_G^+=\bigoplus_{\bvec\in\NN^r} RZ^{\bvec}$, with multiplication
+\begin{equation}\label{eq:algebra}
+ Z^{\bvec}Z^{\cvec}=v^{\Omega_G(\bvec,\cvec)}Z^{\bvec+\cvec},
+ \qquad
+ \Omega_G(\bvec,\cvec)=\sum_{\substack{i<j\\\{i,j\}\in E(G)}}
+                  (b_jc_i-b_ic_j).
+\end{equation}
+Bilinearity of $\Omega_G$ gives associativity. The $Z^{\bvec}$ are basis
+symbols, and $[Z^{\bvec}]$ denotes coefficient extraction in this basis.
+For an independent set $J$, let $\one_J$ be its indicator vector and put
+\begin{equation}\label{eq:independent-sums}
+ E_k(G)=\sum_{\substack{J\subseteq[r]\text{ independent}\\|J|=k}}
+           Z^{\one_J},\qquad E_0(G)=1.
+\end{equation}
+By \cite[Proposition~2.2]{OAI}, these elements commute. Thus
+$\Phi_G:\Lambda_{\Z}\to\cA_G^+$ is the homomorphism determined by
+$\Phi_G(e_k)=E_k(G)$. Its degree is the total vertex exponent.
+All graph notation also applies to any finite totally ordered vertex set
+by increasing relabeling.
+
+\section{Elementary positivity for vertex multicolorings}\label{sec:proof}
+\noindent\textit{External dependency.}
+We take Proposition~2.2, Lemmas~5.1 and~5.7, and Theorem~5.8 of the
+September~24, 2026 version of \cite{OAI} as external results.
+The proof below is a deduction from those assertions; it does not
+independently establish their validity.
+
+\begin{theorem}\label{thm:main}
+Assuming the cited external results, for every natural unit interval
+graph $G$ and every $\avec\in\NN^{V(G)}$,
+\begin{equation}\label{eq:main}
+ X_{G,\avec}(\xx;q)=\sum_{\lambda\vdash N}
+                  c_\lambda(G,\avec;q)e_\lambda(\xx),
+ \qquad c_\lambda(G,\avec;q)\in\NN[q].
+\end{equation}
+More precisely, with $M$ as in \eqref{eq:NM},
+\begin{equation}\label{eq:coefficient-formula}
+ c_\lambda(G,\avec;q)
+   =\sum_{d=0}^{M}
+       \bigl[v^{\,2d-M}Z^{\avec}\bigr]\Phi_G(m_\lambda)\,q^d.
+\end{equation}
+In particular, each $c_\lambda(G,\avec;q)$ has degree at most $M$.
+\end{theorem}
+
+\subsection{Positivity at arbitrary vertex multiplicities}
+\begin{lemma}\label{lem:positivity}
+Under the external results above, for every natural unit interval graph
+$G$, every partition $\lambda$, and every $\avec\in\NN^{V(G)}$,
+\begin{equation}\label{eq:positive-coefficient}
+ [Z^{\avec}]\Phi_G(m_\lambda)\in\NN[v,v^{-1}].
+\end{equation}
+\end{lemma}
+\begin{proof}
+Choose an ordered induced embedding of $G$ into an auxiliary triangular
+graph $\Gamma$ supplied by \cite[Lemma~5.1]{OAI}. Write $D$ for its
+independence number. The two results
+\cite[Lemma~5.7 and Theorem~5.8]{OAI}, applied in the all-negative chamber
+of that construction, give
+\begin{equation}\label{eq:ambient-positivity}
+ \Phi_\Gamma(m_\lambda)
+       \in\bigoplus_{\bvec\in\NN^{V(\Gamma)}}
+                       \NN[v,v^{-1}]Z^{\bvec}
+       \qquad\text{if }\ell(\lambda)\leq D.
+\end{equation}
+Specifically, Theorem~5.8 identifies this evaluation with the section
+whose finiteness, nonnegative vertex support, and Laurent-coefficient
+positivity are asserted in Lemma~5.7. Thus \eqref{eq:ambient-positivity}
+concerns every vertex exponent, not only exponents with coordinates
+zero or one.
+
+To compare their finite-alphabet convention with ours, note that
+$E_k(\Gamma)=0$ for $k>D$. Hence $\Phi_\Gamma$ factors through the
+specialization of symmetric functions to $D$ variables. This agrees with
+the evaluation in the cited results. If $\ell(\lambda)>D$, that
+specialization sends $m_\lambda$ to zero, so
+\eqref{eq:ambient-positivity} holds for these partitions as well.
+
+Identify $V(G)$ with the selected vertices of $\Gamma$ and define the
+$R$-linear map
+\begin{equation}\label{eq:projection}
+ \rho:\cA_\Gamma^+\longrightarrow\cA_G^+,
+ \qquad
+ \rho(Z^{\bvec})=
+ \begin{cases}
+  Z^{\bvec|_{V(G)}},&\supp(\bvec)\subseteq V(G),\\
+  0,&\text{otherwise},
+ \end{cases}
+\end{equation}
+where $\supp(\bvec)=\{u:b_u\ne0\}$.
+This is an algebra homomorphism. Indeed, if either of two nonnegative
+exponent vectors uses an outside vertex, their sum still uses that
+vertex; both sides of multiplicativity are then zero. If both are
+supported on $V(G)$, the induced embedding gives
+$\Omega_\Gamma(\bvec,\cvec)=
+ \Omega_G(\bvec|_{V(G)},\cvec|_{V(G)})$, which proves multiplicativity
+in the remaining case.
+
+An independent set of $\Gamma$ contained in $V(G)$ is exactly an
+independent set of $G$. Therefore
+$\rho(E_k(\Gamma))=E_k(G)$ for every $k$, and equality on the
+algebraically independent generators $e_k$ implies
+\begin{equation}\label{eq:intertwining}
+ \rho\circ\Phi_\Gamma=\Phi_G.
+\end{equation}
+Let $\widetilde{\avec}$ extend $\avec$ by zero outside $V(G)$. Then
+\[
+ [Z^{\avec}]\Phi_G(m_\lambda)
+   =[Z^{\widetilde{\avec}}]\Phi_\Gamma(m_\lambda)
+   \in\NN[v,v^{-1}],
+\]
+as required. Crucially, \eqref{eq:projection} is defined on the
+nonnegative-exponent algebra, not on the full quantum torus, where
+vertex generators would be invertible.
+\end{proof}
+
+\subsection{The multicoloring kernel and its normalization}
+For $s\geq1$, write $\xx_s=(x_1,\ldots,x_s)$ and set
+\begin{equation}\label{eq:kernel}
+ \mathcal E_G(t)=\sum_{k\geq0}E_k(G)t^k,
+ \qquad
+ K_s=\mathcal E_G(x_s)\mathcal E_G(x_{s-1})\cdots
+                       \mathcal E_G(x_1).
+\end{equation}
+The sum defining $\mathcal E_G$ is finite. Its values commute, but the
+displayed descending color order will match the ascent convention.
+
+\begin{lemma}\label{lem:kernel}
+For every $s\geq1$,
+\begin{equation}\label{eq:kernel-identity}
+ X_{G,\avec}(\xx_s;v^2)=v^M[Z^{\avec}]K_s.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Expanding $K_s$ chooses an independent set $J_c$ for each color
+$c\in[s]$. The associated term is
+\[
+ \left(\prod_{c=1}^s x_c^{|J_c|}\right)
+ Z^{\one_{J_s}}Z^{\one_{J_{s-1}}}\cdots Z^{\one_{J_1}}.
+\]
+Its vertex exponent is $\sum_c\one_{J_c}$. Thus extraction of
+$Z^{\avec}$ is equivalent to requiring
+$C_i:=\{c\in[s]:i\in J_c\}$ to have cardinality $a_i$.
+Independence of each $J_c$ says exactly that adjacent vertices receive
+disjoint color sets. Conversely, the sets $C_i$ recover all the $J_c$
+uniquely. This is a bijection with the multicolorings in
+\eqref{eq:weighted-function}; no occurrences at a vertex are labeled.
+
+Repeated use of \eqref{eq:algebra} gives the Laurent weight
+$v^{T(C)}$, where
+\begin{equation}\label{eq:energy}
+ T(C)=\sum_{c>d}\Omega_G(\one_{J_c},\one_{J_d}).
+\end{equation}
+Fix an edge $\{i,j\}$ with $i<j$ and a pair
+$(a,b)\in C_i\times C_j$. The colors are unequal. If $a<b$, the
+factor containing vertex $j$ occurs to the left of the factor
+containing $i$, and its contribution to \eqref{eq:energy} is $+1$.
+If $a>b$, the contribution is $-1$. There are $a_i a_j$ such pairs
+on this edge. Consequently,
+\begin{equation}\label{eq:normalization}
+ T(C)=\asc_G(C)-\bigl(M-\asc_G(C)\bigr)
+     =2\asc_G(C)-M.
+\end{equation}
+Multiplication by $v^M$ changes the weight to
+$v^{2\asc_G(C)}$, proving \eqref{eq:kernel-identity}.
+\end{proof}
+
+\subsection{Extraction of the elementary coefficients}
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+If $N=0$, the unique multicoloring has all color sets empty and the
+function is $1$; assume $N>0$. In a second commuting alphabet
+$\mathbf y$, the elementary--monomial Cauchy identity is
+\begin{equation}\label{eq:cauchy}
+ \prod_{c=1}^s\left(\sum_{k\geq0}e_k(\mathbf y)x_c^k\right)
+   =\prod_{c,j}(1+x_cy_j)
+   =\sum_\lambda e_\lambda(\xx_s)m_\lambda(\mathbf y).
+\end{equation}
+For clarity, a fixed monomial in the $y_j$ with positive exponents
+$\lambda_1,\ldots,\lambda_\ell$ has coefficient
+$\prod_{i=1}^{\ell}e_{\lambda_i}(\xx_s)$ in the middle product.
+Grouping such monomials proves the last equality. The identity is
+interpreted degree by degree, so there is no convergence issue.
+
+Apply $\Phi_G$ to the $\mathbf y$-symmetric functions. Since the
+$E_k(G)$ commute, their generating factors may be put in the descending
+order of \eqref{eq:kernel}, giving
+\begin{equation}\label{eq:e-kernel}
+ K_s=\sum_\lambda e_\lambda(\xx_s)\Phi_G(m_\lambda).
+\end{equation}
+The evaluation preserves total degree. Extracting $Z^{\avec}$ therefore
+retains only partitions of $N$. Combining \eqref{eq:e-kernel} with
+Lemma~\ref{lem:kernel}, we obtain, for every $s$,
+\begin{equation}\label{eq:laurent-expansion}
+ X_{G,\avec}(\xx_s;v^2)
+   =\sum_{\lambda\vdash N}P_\lambda(v)e_\lambda(\xx_s),
+ \qquad
+ P_\lambda(v)=v^M[Z^{\avec}]\Phi_G(m_\lambda).
+\end{equation}
+Lemma~\ref{lem:positivity} gives
+$P_\lambda(v)\in\NN[v,v^{-1}]$.
+It remains to justify that these Laurent polynomials use only the even,
+nonnegative powers $1,v^2,\ldots,v^{2M}$; Laurent positivity alone
+would not establish the required conclusion over $\NN[q]$.
+
+Take $s\geq N$. The polynomials
+$\{e_\lambda(\xx_s):\lambda\vdash N\}$ form a basis of the homogeneous
+symmetric polynomials of degree $N$. Every multicoloring satisfies
+$0\leq\asc_G(C)\leq M$. Hence the left side of
+\eqref{eq:laurent-expansion} has no power $v^j$ with
+$j\notin\{0,2,\ldots,2M\}$. Extracting such a power gives
+\[
+ 0=\sum_{\lambda\vdash N}
+           [v^j]P_\lambda(v)\,e_\lambda(\xx_s).
+\]
+Linear independence implies $[v^j]P_\lambda(v)=0$ for every
+$\lambda$. Thus there is a polynomial $c_\lambda(q)\in\NN[q]$
+of degree at most $M$ such that $P_\lambda(v)=c_\lambda(v^2)$.
+Its coefficients are exactly those in
+\eqref{eq:coefficient-formula}. The substitution $q\mapsto v^2$
+is injective, so \eqref{eq:laurent-expansion} proves
+\eqref{eq:main} in finitely many colors. These coefficients are
+independent of $s$, and setting $x_s=0$ is compatible with the
+multicoloring definition. Passing to symmetric functions proves
+\eqref{eq:main} in the infinite alphabet.
+\end{proof}
+
+\begin{remark}[Why no factorial division is needed]
+At each vertex, the proof chooses a set of colors, not an ordering of
+those colors. Hence the coefficient $[Z^{\avec}]$ already counts exactly
+the required multicolorings. The essential input is the all-exponent
+positivity of Lemma~\ref{lem:positivity}.
+\end{remark}
+
+\subsection{Generalized Hessenberg chromatic functions}
+Take $0=i_0<i_1<\cdots<i_r=n$ and
+$I=\{i_1,\ldots,i_{r-1}\}$. A \emph{generalized Hessenberg function}
+is a weakly increasing map $h:I\cup\{n\}\to I\cup\{n\}$ with
+$h(i)\geq i$. Its ordered weighted graph has vertices $I\cup\{n\}$,
+edges $\{i,j\}$ for $i<j\leq h(i)$, and weight
+$w_h(i_k)=i_k-i_{k-1}$. Kiem--Lee's function
+$\csf_q(h)$ is the multicoloring series \eqref{eq:weighted-function}
+for this graph and weight \cite[Definitions~2.1 and~4.3]{KL}.
+
+\begin{corollary}\label{cor:KL}
+Under the external input of Theorem~\ref{thm:main}, $\csf_q(h)$ is
+$e$-positive over $\NN[q]$ for every generalized Hessenberg function $h$.
+\end{corollary}
+\begin{proof}
+Define $g:[r]\to[r]$ by the requirement
+
+\begin{equation}\label{eq:relabel}
+ h(i_k)=i_{g(k)},\qquad a_k=i_k-i_{k-1}.
+\end{equation}
+Since $h$ is extensive and weakly increasing, $g(k)\geq k$ and
+$g$ is weakly increasing. Increasing relabeling $i_k\mapsto k$
+identifies the graph of $h$ with the natural unit interval graph $G_g$:
+for $k<\ell$,
+\[
+ i_\ell\leq h(i_k)
+ \quad\Longleftrightarrow\quad
+ \ell\leq g(k).
+\]
+The same relabeling preserves the color-set cardinalities and every
+ascending color pair across every edge. Accordingly,
+\begin{equation}\label{eq:KL-identification}
+ \csf_q(h)=X_{G_g,\avec}(\xx;q),\qquad
+ |\avec|=\sum_{k=1}^r(i_k-i_{k-1})=n.
+\end{equation}
+Applying \eqref{eq:main} to \eqref{eq:KL-identification} yields
+\[
+ \csf_q(h)=\sum_{\lambda\vdash n}
+       c_\lambda(G_g,\avec;q)e_\lambda(\xx),
+ \qquad c_\lambda(G_g,\avec;q)\in\NN[q].
+\]
+This is precisely the elementary-positivity assertion of
+\cite[Question~4.9]{KL}.
+\end{proof}
+
+\section{Elementary positivity for step-\texorpdfstring{$\tau$}{tau} dual Dyck functions}\label{sec:dyck}
+
+Fix an integer $\tau\geq0$. A \emph{dual step-$\tau$ word} is a finite
+integer word $w$ satisfying $w_{j+1}>w_j+\tau$ at each successive
+position. Empty and one-letter words are allowed. For a finite multiset
+$S$ of integers, a dual step-$\tau$ factorization is a sequence
+$\mathcal F=(F_1,F_2,\ldots)$ of such words, all but finitely many empty,
+whose concatenation $w(\mathcal F)$ rearranges $S$. Equal occurrences
+are not labeled. The step-one factor conditions are those of
+\cite[Definitions~2.3--2.4]{Hawkes}, with factor and variable indices
+shifted from $0,1,\ldots$ to $1,2,\ldots$.
+
+For integers $a,b$, define
+\begin{equation}\label{eq:pair-stat}
+ d_\tau(a,b)=
+ \begin{cases}
+  \max(0,a+\tau-b),&a\leq b,\\
+  \max(0,b+1+\tau-a),&a>b,
+ \end{cases}
+ \qquad
+ \dinv_\tau(w)=\sum_{p<q}d_\tau(w_p,w_q).
+\end{equation}
+Define the factorization series and its fixed-degree coefficients by
+\begin{equation}\label{eq:dual-dyck}
+ \begin{aligned}
+ \DS^{*(\tau)}(S,d;\xx)
+   &=\sum_{\substack{\mathcal F\text{ dual step-}\tau\\
+                     \dinv_\tau(w(\mathcal F))=d}}
+                   \prod_{a\geq1}x_a^{|F_a|},\\
+ \mathcal D^*_{S,\tau}(\xx;q)
+   &=\sum_{d\geq0}q^d\DS^{*(\tau)}(S,d;\xx).
+ \end{aligned}
+\end{equation}
+Each monomial coefficient is finite because its exponents prescribe all
+factor lengths. There is no condition on the first entry or sign of a
+factor, and no restriction on $S$ beyond finiteness.
+
+Write a nonempty multiset as $S=c_1^{a_1}\cdots c_r^{a_r}$, with
+$c_1<\cdots<c_r$ and $a_i>0$. Let $G_{S,\tau}$ have vertices $[r]$
+and edges
+\begin{equation}\label{eq:dyck-graph}
+ \{i,j\}\in E(G_{S,\tau})\quad\Longleftrightarrow\quad
+ i<j\text{ and }c_j-c_i\leq\tau.
+\end{equation}
+This is a natural unit interval graph: its defining function is
+$g(i)=\max\{j:c_j\leq c_i+\tau\}$, which is weakly increasing and
+satisfies $g(i)\geq i$. Put
+\begin{equation}\label{eq:dyck-shift}
+ \begin{aligned}
+ M_\tau(S)&=\sum_{\substack{i<j\\c_j-c_i\leq\tau}}a_i a_j,\\
+ \beta_\tau(S)&=\tau\sum_i\binom{a_i}{2}
+   +\sum_{\substack{i<j\\c_j-c_i\leq\tau}}
+          (\tau-c_j+c_i)a_i a_j.
+ \end{aligned}
+\end{equation}
+Both quantities are nonnegative integers.
+
+\begin{lemma}\label{lem:dyck-statistic}
+For every rearrangement $w$ of $S$,
+\begin{equation}\label{eq:static-statistic}
+ \dinv_\tau(w)=\beta_\tau(S)
+       +\#\{(p,q):p<q,\ 0<w_p-w_q\leq\tau\}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Each equal pair contributes $\tau$. For distinct values with difference
+$\delta>0$, the increasing order contributes $\max(0,\tau-\delta)$
+and the decreasing order contributes $\max(0,\tau+1-\delta)$.
+Since $\delta$ and $\tau$ are integers, both are zero when
+$\delta>\tau$; otherwise they are $\tau-\delta$ and
+$\tau-\delta+1$. Summing the order-independent contributions gives
+$\beta_\tau(S)$, with one extra unit for each counted decreasing pair.
+\end{proof}
+
+\begin{theorem}\label{thm:dyck}
+Under the external input of Theorem~\ref{thm:main}, for every finite
+multiset $S$ of integers and all integers $\tau,d\geq0$, the series
+$\DS^{*(\tau)}(S,d;\xx)$ is symmetric and $e$-positive over $\NN$.
+More precisely, for nonempty $S$, write $G=G_{S,\tau}$,
+$\avec=(a_1,\ldots,a_r)$, $M=M_\tau(S)$, and $\beta=\beta_\tau(S)$.
+Then
+\begin{equation}\label{eq:dyck-chromatic}
+ \begin{aligned}
+ \mathcal D^*_{S,\tau}(\xx;q)
+   &=q^{\beta+M}X_{G,\avec}(\xx;q^{-1})\\
+   &=\sum_{\lambda\vdash |S|}
+       q^{\beta+M}c_\lambda(G,\avec;q^{-1})e_\lambda(\xx),
+ \end{aligned}
+\end{equation}
+and each displayed elementary coefficient belongs to $\NN[q]$.
+In particular, for $\beta\leq d\leq\beta+M$,
+\begin{equation}\label{eq:dyck-coefficient}
+ [e_\lambda]\DS^{*(\tau)}(S,d;\xx)
+    =[q^{\beta+M-d}]c_\lambda(G,\avec;q)\in\NN,
+\end{equation}
+and $\DS^{*(\tau)}(S,d;\xx)=0$ outside that interval.
+\end{theorem}
+\begin{proof}
+Every dual step-$\tau$ factor lists distinct values in increasing order
+with successive gaps greater than $\tau$. All its pairwise gaps
+therefore exceed $\tau$, so its value levels form an independent set of $G$.
+Assign to vertex $i$ the set
+$C_i=\{a:c_i\text{ occurs in }F_a\}$. This gives a proper
+multicoloring with $|C_i|=a_i$. Conversely, from such a multicoloring,
+form $F_a$ by listing in increasing order all $c_i$ with $a\in C_i$.
+Independence ensures the required gaps. These constructions are inverse
+and preserve monomials, including empty factors and repeated values.
+
+For an edge $i<j$, occurrences in factors $a\in C_i$ and $b\in C_j$
+form a decreasing pair in~\eqref{eq:static-statistic} exactly when
+$b<a$. Properness excludes $a=b$, so among the $a_i a_j$ pairs on
+this edge, these are exactly those not counted by $\asc_G$. Every
+decreasing pair counted there comes from an edge. Consequently,
+Lemma~\ref{lem:dyck-statistic} gives
+\[
+ \dinv_\tau(w(\mathcal F))=\beta+M-\asc_G(C).
+\]
+Summing this monomial-preserving identity proves the first equality
+in~\eqref{eq:dyck-chromatic}. By Theorem~\ref{thm:main}, each
+$c_\lambda(G,\avec;q)$ has nonnegative integer coefficients and
+degree at most $M$. Reversing its coefficients and multiplying by
+$q^\beta$ therefore gives a positive polynomial supported in
+$[\beta,\beta+M]$. Extracting $q^d$ proves the claims. For $S=\varnothing$,
+the unique factorization has every factor empty, so
+$\DS^{*(\tau)}(\varnothing,0;\xx)=1$ and all other degrees are zero.
+\end{proof}
+
+\subsection{The original dual Dyck functions}
+Hawkes's original statistic is
+\[
+ \di(w)=\#\{(p,q):p<q,\ w_p=w_q+1\};
+\]
+in particular, equal pairs are not counted
+\cite[Definition~2.1]{Hawkes}. Put $\kappa(S)=\sum_i\binom{a_i}{2}$.
+At $\tau=1$, the distinct-value terms in $\beta_1(S)$ vanish and
+\eqref{eq:static-statistic} becomes
+\begin{equation}\label{eq:classical-shift}
+ \beta_1(S)=\kappa(S),\qquad
+ \dinv_1(w)=\kappa(S)+\di(w).
+\end{equation}
+
+\begin{corollary}\label{cor:classical}
+Under the same external input, the original dual Dyck symmetric functions
+$\DS^*(S,d;\xx)$ of~\cite[Definition~2.5]{Hawkes} are $e$-positive
+over $\NN$ for every finite multiset $S$ and every $d\geq0$.
+\end{corollary}
+\begin{proof}
+The step-one factor conditions agree with Hawkes's, after reindexing
+the variables. Equation~\eqref{eq:classical-shift} gives
+\[
+ \DS^*(S,d;\xx)=\DS^{*(1)}(S,d+\kappa(S);\xx),
+\]
+so Theorem~\ref{thm:dyck} applies. The empty multiset is immediate.
+\end{proof}
+
+For $\tau=0$, the value graph has no edges and both $M_0(S)$ and
+$\beta_0(S)$ vanish, giving $\mathcal D^*_{S,0}=\prod_i e_{a_i}$.
+For a single value repeated $m$ times, the graph has no edges at any
+step, but the equal-pair shift gives
+$\mathcal D^*_{S,\tau}=q^{\tau\binom m2}e_m$.
+For $\tau>1$, nearby distinct values can also contribute to
+$\beta_\tau(S)$; the equal-pair term alone would not give the correct
+grading.
+
+\begin{thebibliography}{OAI}
+
+\bibitem[Haw]{Hawkes}
+Graham Hawkes,
+\emph{Dyck symmetric functions and applications to $q,t$-Catalan polynomials},
+preprint, 2026.
+\href{https://arxiv.org/abs/2605.13003v1}{arXiv:2605.13003v1}.
+Numbered references above follow this version.
+
+\bibitem[Hwa]{Hwang}
+Byung-Hak Hwang,
+\emph{Chromatic quasisymmetric functions and noncommutative
+$P$-symmetric functions},
+Transactions of the American Mathematical Society \textbf{377} (2024),
+2855--2896.
+\href{https://doi.org/10.1090/tran/9096}{doi:10.1090/tran/9096}.
+\href{https://arxiv.org/abs/2208.09857v2}{arXiv:2208.09857v2}.
+
+\bibitem[KL]{KL}
+Young-Hoon Kiem and Donggun Lee,
+\emph{Birational geometry of generalized Hessenberg varieties and the
+generalized Shareshian--Wachs conjecture},
+Journal of Combinatorial Theory, Series A \textbf{206} (2024), 105884.
+\href{https://doi.org/10.1016/j.jcta.2024.105884}{doi:10.1016/j.jcta.2024.105884}.
+\href{https://arxiv.org/abs/2208.12282v3}{arXiv:2208.12282v3},
+19 February 2024. Numbered references above follow this arXiv version.
+
+\bibitem[OAI]{OAI}
+OpenAI,
+\emph{Elementary positivity of chromatic quasisymmetric functions},
+OpenAI Math Release preprint, 24 September 2026, 51 pp.
+\href{https://github.com/openai/math/blob/fd4aeeb/preprints/Elementary-Positivity-of-Chromatic-Quasisymmetric-Functions-September-24-2026/paper.pdf}{OpenAI mathematics repository: manuscript PDF at revision \texttt{fd4aeeb}}.
+The external inputs used here are Proposition~2.2, Lemmas~5.1 and~5.7,
+and Theorem~5.8 of that version.
+
+\end{thebibliography}
+\end{document}
