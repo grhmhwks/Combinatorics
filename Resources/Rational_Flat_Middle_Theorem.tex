@@ -59,9 +59,7 @@ of the maximal-ideal associated graded of the spherical module.  Each
 fixed-deficit piece is an $\mathfrak{sl}_2$-module, and its primitive
 multiplicities are controlled by a quotient generated in positive
 deficit.  We also deduce a primitive Hodge-vanishing statement for the
-Catalan variety of Galashin and Lam.  An appendix records the exact
-version of Ma's theorem used here and gives a self-contained
-normalization argument for the two global grading shifts.
+Catalan variety of Galashin and Lam.
 \end{abstract}
 
 \section{Introduction}
@@ -165,13 +163,8 @@ deficit.  A monomial of maximal-ideal order $a$ must consequently
 have deficit at least $a$.
 
 The rational-master character framework was formulated by Gorsky and
-Negu\c{t} \cite{GorskyNegut}.  The only input not presently available
-in a refereed publication is the scalar rational-master character in
-Ma's updated author manuscript \cite{MaCuspidal}.  Ma's filtration comparison is now
-published \cite{MaFiltrations}.  Appendix~\ref{app:Ma} identifies the
-exact manuscript version used here, records the logical dependencies,
-and supplies a unit normalization that fixes both global grading
-shifts.
+Negu\c{t} \cite{GorskyNegut}.  We use Ma's rational-master character
+theorem \cite{MaCuspidal}.
 
 The paper is organized as follows.  Section~\ref{sec:Cherednik-input}
 states the Cherednik input and fixes filtration conventions.
@@ -212,8 +205,7 @@ polynomial of ordinary degree $u$ then has weight
 \end{equation}
 
 Let $F_i^{\alg}L_c$ be the algebraic filtration of
-Gorsky--Oblomkov--Rasmussen--Shende \cite{GORS}, equivalently Ma's
-algebraic/Kazhdan filtration, and set
+Gorsky--Oblomkov--Rasmussen--Shende \cite{GORS}, and set
 \[
  F_i^{\alg}R=R\cap F_i^{\alg}L_c.
 \]
@@ -225,7 +217,9 @@ exact projection in characteristic zero,
 as a bigraded vector space.
 
 The character theorem needed below is the following scalar
-specialization of Ma's rational-master theorem.
+specialization of Ma's rational-master theorem
+\cite[Theorems~4.6 and~7.8 and Proposition~7.2]{MaCuspidal},
+in the algebraic-filtration convention of \cite{GORS}.
 
 \begin{theorem}[Ma's scalar rational-master character]
 \label{thm:Ma-character}
@@ -241,11 +235,6 @@ where
  =\frac{F_i^{\alg}R(k)}{F_{i-1}^{\alg}R(k)}.
 \]
 \end{theorem}
-
-Appendix~\ref{app:Ma} explains the exact source and normalization of
-Theorem~\ref{thm:Ma-character}.  The remainder of the argument uses
-that theorem, published results of \cite{GORS}, and elementary
-commutative algebra.
 
 For reference, the three filtrations used in the proof are summarized
 below.
@@ -791,104 +780,13 @@ $H^{K,(K-\delta,K-\delta)}$ vanishes whenever
 \end{equation}
 \end{corollary}
 
-\appendix
-
-\section{The rational-master input and its normalization}
-\label{app:Ma}
-
-The proof uses the scalar character in
-Theorem~\ref{thm:Ma-character}.  Because the relevant rational-master
-manuscript is currently an author version, we record the precise
-source and the normalization needed here.
-
-\subsection{Version and logical dependencies}
-
-The arXiv record is \href{https://arxiv.org/abs/2407.00971}{arXiv:2407.00971}.
-The version checked for this paper is the $42$-page author PDF linked
-from Ma's research webpage as ``more updated than arxiv version,''
-with PDF generation date 6 October 2025:
-\begin{center}
-\url{https://xinchma.github.io/pdfs/cuspidal_catalan.pdf}
-\end{center}
-Its SHA-256 digest is
-\begin{center}
-\texttt{1a4bc0ca37d9c7121274248d2792ea6800fd25625af224d2b3e91664d78d9e2d}.
-\end{center}
-The distinction from the older arXiv version matters because the
-updated manuscript uses the rational-Catalan normalization required in
-\eqref{eq:Ma-character}.
-
-In the checked version, the route to the scalar theorem is as follows.
-The rational shuffle theorem is stated as Theorem~5.4, with
-its equation~(76) identifying the scalar spherical coefficient with
-$C_{r,s}(q,t)$.  Theorem~5.5(b) computes the spherical character for
-the Hodge filtration.  Definition~5.1 converts the Hodge filtration
-and Euler grading into the Kazhdan grading.  Propositions~5.9 and 5.10,
-summarized in Corollary~1.3, transfer the result to the
-inductive/algebraic filtration for all positive coprime slopes; the
-all-slope passage uses the slope symmetry recorded in
-\cite[Corollary~1.1]{GorskyArc}.  The filtration identification is also
-supported by the published paper
-\cite{MaFiltrations}, especially Lemma~3.9 and Theorem~3.16.
-
-The stronger sheaf-level identification in Conjecture~4.6 of the
-author manuscript is not used.  The character calculation proceeds
-through the equality of equivariant $K$-classes in Proposition~4.9,
-together with localization and the dimension comparison in
-Theorem~5.5.
-
-\subsection{Fixing both global grading shifts}
-
-The updated manuscript's discussion of extremal Euler degrees fixes
-the Euler normalization.  Since the character has two gradings, we
-record an additional normalization by the spherical unit; this also
-fixes the filtration shift.
-
-Suppose that after the Hodge-to-Kazhdan conversion the scalar character
-were determined only up to a global factor $x^\alpha y^\beta$.  The
-spherical module $R$ has a unique lowest Euler-weight line, spanned by
-the constant polynomial.  Its Euler weight is $-g$ by the standard
-normalization \cite[Theorem~1.10]{BEG}; see also
-\cite[Section~2.2.3]{GORS}.  Its algebraic filtration degree is $g$:
-in the notation of Proposition~\ref{prop:gr-comparison}, the unit is
-$G_{0,0}$, so $k=-g$, $\ell=0$, and $i+k=2\ell$ gives $i=g$.
-Therefore the unit contributes
-\[
- x^{-g}y^g.
-\]
-
-On the Catalan side, there is a unique area-zero path, and its monomial
-is $t^g$.  Under the substitution $(q,t)=(xy,x^{-1}y)$, this monomial
-is again
-\[
- (x^{-1}y)^g=x^{-g}y^g.
-\]
-Thus the unique lowest-weight term agrees on both sides, forcing
-\[
- \alpha=\beta=0.
-\]
-This completes the normalization of
-Theorem~\ref{thm:Ma-character} in the form used in the present paper.
-
 \begin{thebibliography}{99}
-
-\bibitem{BEG}
-Y.~Berest, P.~Etingof, and V.~Ginzburg,
-\emph{Finite-dimensional representations of rational Cherednik algebras},
-Int. Math. Res. Not. 2003, no.~19, 1053--1088,
-\doi{10.1155/S1073792803210205}.
 
 \bibitem{GalashinLam}
 P.~Galashin and T.~Lam,
 \emph{Positroids, knots, and $q,t$-Catalan numbers},
 Duke Math. J. 173 (2024), no.~11, 2117--2195,
 \doi{10.1215/00127094-2023-0049}.
-
-\bibitem{GorskyArc}
-E.~Gorsky,
-\emph{Arc spaces and DAHA representations},
-Selecta Math. (N.S.) 19 (2013), no.~1, 125--140,
-\doi{10.1007/s00029-012-0096-0}.
 
 \bibitem{GHSR}
 E.~Gorsky, G.~Hawkes, A.~Schilling, and J.~Rainbolt,
@@ -928,16 +826,10 @@ Discrete Math. Theor. Comput. Sci. Proc., FPSAC 2015, 769--780,
 
 \bibitem{MaCuspidal}
 X.~Ma,
-\emph{From Cherednik algebras to knot homology via cuspidal
-$\mathcal D$-modules},
-arXiv:2407.00971 (2024); updated author manuscript, 42 pages,
-PDF generated 6 October 2025.
-
-\bibitem{MaFiltrations}
-X.~Ma,
-\emph{Rational Cherednik algebras and knot invariants: filtrations},
-Int. Math. Res. Not. 2026, no.~10, rnag089,
-\doi{10.1093/imrn/rnag089}.
+\emph{From Cherednik algebras to torus knot homology via cuspidal
+$D$-modules},
+\href{https://arxiv.org/abs/2407.00971v2}{arXiv:2407.00971v2},
+25 October 2026.
 
 \bibitem{Mellit}
 A.~Mellit,
