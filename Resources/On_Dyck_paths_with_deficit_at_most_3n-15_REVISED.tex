@@ -1,0 +1,214 @@
+% !TEX program = pdflatex
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,booktabs}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\DeclareMathOperator{\area}{area}\DeclareMathOperator{\dinv}{dinv}
+\DeclareMathOperator{\defc}{defc}\DeclareMathOperator{\sym}{sym}
+\newtheorem{theorem}{Theorem}\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\title{On Dyck paths with deficit at most $3n-15$}\author{Graham Hawkes}\date{}
+\begin{document}\maketitle
+\begin{abstract}
+We give a combinatorial formula for the joint distribution of area and dinv on Dyck paths with deficit at most $3n-15$. The formula expresses the corresponding homogeneous components of the $q,t$-Catalan polynomial as nonnegative sums of symmetric, unimodal polynomials, with a combinatorial interpretation of the multiplicities.
+\end{abstract}
+
+\section{Introduction}
+We use the following terminology and notation from~\cite{H}:
+\begin{itemize}
+\item From \S1.1: Dyck sequences, affine and reverse affine sequences, extractable elements, Dyck skeletons and full Dyck skeletons, lowers and uppers, area, dinv pairs, and deficit ($\defc$).
+\item From \S2: keys, their associated lowers and uppers, and balance on a key.
+\item From \S3.2: dual and reverse dual sequences.
+\item From \S3.3: Dyck tableaux, their row-reading words, and $pTs$ objects.
+\item From \S6.3: the families $\mathcal F_n$, $\mathcal U_n$, and $\mathcal E_n$, the counts $\mathcal N_n(d,a)$, and the polynomials $\sym(i,j)$.
+\end{itemize}
+We identify a Dyck path of semilength $n$ with its length-$n$ Dyck sequence. Write $|W|$ for word length, $U:V$ for concatenation, and $P[-1]$ for the last entry of $P$. Set $M=\binom n2$ and $C_n(q,t)=\sum_D q^{\area(D)}t^{\dinv(D)}$, summed over the length-$n$ Dyck sequences. 
+
+\begin{theorem}\label{main}
+The terms of total degree at least $M-3n+15$ in $C_n(q,t)$ are given by
+\[
+ \left.C_n(q,t)\right|_{\deg_{q,t}\ge M-3n+15}
+ =\sum_{d=0}^{3n-15}\sum_{a=0}^{d}\mathcal N_n(d,a)\,\sym(a,M-d-a).
+\]
+\end{theorem}
+Let $c_d(a)$ count the paths of deficit $d$ and area $a$, with $c_d(-1)=0$.
+\begin{lemma}\label{first-difference}
+For $0\le a\le d\le3n-15$,
+\[
+ \mathcal N_n(d,a)=c_d(a)-c_d(a-1).
+\]
+\end{lemma}
+Proving Lemma~\ref{first-difference} suffices to prove Theorem~\ref{main}. Summing the identity determines the coefficients for areas $0\le a\le d$. The flat-middle theorem~\cite[Theorem~3.12]{H} gives the constant coefficient $c_d(d)$ for $d\le a\le M-2d$, and the symmetry $C_n(q,t)=C_n(t,q)$~\cite[\S1]{LLL} determines the remaining coefficients by reflection $a\mapsto M-d-a$.
+
+\section{Adjacent area counts}
+For a key $K:=(P,X,h)$, put $m=\max(P)$ and write $|X|=2k+1$, so $n=|P|+|X|$. Write $J(P,X)$ for the number of pairs $(v,x)\in P\times X$ with $v-x\notin\{0,1\}$. In this notation, the formulas in~\cite[\S2]{H} give
+\begin{equation}\label{stats}
+ \begin{aligned}
+ \defc(K)&=\defc(P)+J(P,X)+\binom{|X|}{2}-h-\sum_{x\in X}x,\\
+ \area(K)&=\area(P)+\sum_{x\in X}x+k.
+ \end{aligned}
+\end{equation}
+Here $\defc(K)$ is the deficit of any lower or upper on $K$, and $\area(K)$ is the area of any lower on $K$. The area of an upper is $\area(K)+1$, whether or not a lower exists. For fixed $n$, let $\kappa(d,a)$ denote the set of keys $K=(P,X,h)$ with $|P|+|X|=n$, $\defc(K)=d$, and $\area(K)=a$. The statistic-preserving bijections~\cite[\S1.2]{H} identify all paths with lowers and all paths other than full skeletons with uppers. Hence
+\begin{equation}\label{diff}
+ \begin{aligned}
+ c_d(a)-c_d(a-1)&=\#\{F\in\mathcal F_n:\defc(F)=d,\ \area(F)=a\}\\
+ &\quad+\sum_{K\in\kappa(d,a-1)}\bigl(\#\mathrm{uppers}(K)-\#\mathrm{lowers}(K)\bigr).
+ \end{aligned}
+\end{equation}
+Here $\#\mathrm{uppers}(K)$ and $\#\mathrm{lowers}(K)$ count the uppers and lowers associated to $K$, respectively. Only unbalanced keys $K$ with $\area(K)<\defc(K)\le3n-15$ matter.
+
+The next lemma bounds $h$ and the multiplicities in $X$ for an unbalanced key. Let $x_v$ denote the multiplicity of $v$ in $X$.
+\begin{lemma}\label{bounds}
+For an unbalanced key,
+\[
+ h\le k^2,\qquad x_v+x_{v-1}\le k+1,\qquad
+ x_v+x_{v-1}\le k\quad\text{if }v\le\min(P[-1]+1,m).
+\]
+Moreover $\max X\ge\min(P[-1]+2,m+1)$.
+\end{lemma}
+\begin{proof}
+We use the $pTs$ objects of~\cite[\S3.3]{H}, with the definitions adjusted to all $k\ge0$ and with endpoints $P[-1]$ and $m-1$ in place of $0$ and $-1$. The telescoping and tableau arguments of~\cite[\S3.2, Lemma~3.4, and Corollary~3.5]{H} express the number of lowers minus the number of uppers on $K$ as a signed sum over these objects. Since $K$ is unbalanced, this sum is nonzero. Thus there exists a $pTs$ object $(p,T,s)$ with content $X$ and $\dinv(p:\mathrm{RR}(T):s)=h$. We have $|p|\ne|s|$, and the column lengths of $T$ are $k-\min(|p|,|s|)$ and $k+1-\max(|p|,|s|)$.
+
+Regard $p$, each row of $T$, and $s$ as pieces. There are at most $k+1$ nonempty pieces: the tableau has $k-\min(|p|,|s|)$ rows, and two nonempty outer words require $\min(|p|,|s|)\ge1$. The entries within each piece differ pairwise by at least two, so each piece contains at most one entry in $\{v-1,v\}$. This gives $x_v+x_{v-1}\le k+1$. If $v\le\min(P[-1]+1,m)$, the endpoint conditions exclude these values from both $p$ and $s$. Only the tableau rows can then contribute, giving $x_v+x_{v-1}\le k$. A nonempty $p$ contains an entry at least $P[-1]+2$, and a nonempty $s$ contains an entry at least $m+1$. Since at least one is nonempty, the bound on $\max X$ follows.
+
+All dinv pairs lie between distinct pieces. Two pieces of lengths $l,t$ form at most $\min(l,t)$ dinv pairs, since each entry has at most one partner in the other piece. Summing these bounds over all pairs of pieces therefore bounds $h$. Pad the list of lengths with zeros to obtain $k+1$ lengths with sum $2k+1$. Transferring one unit from a largest length to a smallest length cannot decrease the sum of the pairwise minima when those lengths differ by at least two. The sum is therefore maximized when $k$ lengths are $2$ and the remaining length is $1$. Hence $h\le2\binom k2+k=k^2$.
+\end{proof}
+
+\section{Classification of the unbalanced keys}
+\begin{proposition}\label{exceptions}
+Suppose $K=(P,X,h)$ is an unbalanced key with $\area(K)<\defc(K)\le3n-15$. Exactly one lower or upper $(P,A,B)$ is associated to $K$. If it is an upper, it belongs to $\mathcal U_n$. For a lower, either $P$ consists of zeros, with $(A,B)\in\{((1),\varnothing),((12),(0))\}$; or $P$ is binary and ends in $1$, with $(A,B)=((2),\varnothing)$.
+\end{proposition}
+\begin{proof}
+We first show that $k\le5$, then distinguish whether $P$ ends at its maximum. Fix an unbalanced key $K$ with $\area(K)<\defc(K)\le3n-15$ and an associated lower or upper $(P,A,B)$. Set
+\[
+ \begin{aligned}
+ \xi&=\defc(K)-(3n-15)\le0,\\
+ \zeta&=\defc(K)+\area(K)-2(3n-15)<0.
+ \end{aligned}
+\]
+In $\defc(K)+\area(K)$ the sum of the entries of $X$ cancels. Each entry of $P$ forms at least $k$ pairs counted by $J(P,X)$, by Lemma~\ref{bounds}. Hence~\eqref{stats} gives
+\[
+ \zeta\ge k|P|+\binom{2k+1}{2}-k^2+k-6n+30=(k-6)(|P|+k-4).
+\]
+In particular $k\le5$. We also need to account for entries of $X$ larger than $m$. Write
+\[
+ g=\#\{x\in X:x>m\},\qquad R=\sum_{x>m}(x-m-1),
+\]
+with multiplicities. Read $A$ forwards and $B$ backwards. Starting at $P[-1]$ and $m-1$, respectively, these words rise by at most one per step. If either word contains $t$ entries above $m$, the $j$th such entry in this reading order is at most $m+j$. Its entries therefore contribute at most $\binom t2$ to $R$. In particular $R\le\binom g2$. If both $A$ and $B$ contain entries above $m$, then $R\le\binom{g-1}2$, since $\binom{t}{2}+\binom{g-t}{2}$ is largest at $t=1$ or $g-1$ for $1\le t<g$.
+
+We will also use a sharper bound when $A$ consists of $k+1$ entries above $m$ and all entries of $B$ are at most $m$. Each occurrence of $x>m+1$ in $A$ has earlier entries $m+1,\ldots,x-1$. These give $R$ distinct pairs that are not dinv pairs. Every dinv pair between $A$ and $B$ has values $(m+1,m)$. Therefore
+\begin{equation}\label{oneword}
+ h+R\le\binom{k+1}2+\binom k2+x_{m+1}x_m=k^2+x_{m+1}x_m.
+\end{equation}
+
+We also use the following property of the skeleton $P$. If the first occurrence of a positive value $v$ has only one preceding $v-1$, it begins a consecutive rise that continues to the end of $P$. Otherwise, the last entry of the maximal such rise would be extractable before the end of $P$. The entries in this rise are first occurrences, so its last entry is the maximum of $P$.
+
+\subsection*{Skeletons ending below their maximum}
+Suppose $P[-1]<m$. The preceding observation shows that $P$ is full. By~\cite[Lemma~1.12]{H}, every positive entry has at least two earlier entries of each smaller value. Mark the first two copies of $0,\ldots,m-1$, the first $m$, and the last entry. In order they form
+\[
+ Q=00\,11\cdots(m-1)(m-1)\,m\,P[-1].
+\]
+For any word, its deficit is the number of pairs that are not dinv pairs minus its area. Without its last entry, $Q$ has deficit $m^2$: each occurrence of $v$ has $2v$ smaller entries to its left, giving $2v$ pairs that are not dinv pairs. Subtracting its contribution $v$ to area leaves $v$. The total is $2(0+\cdots+(m-1))+m=m^2$. Appending $P[-1]$ adds at least $m-1$ to the deficit: for its value $v<m$, there are $2v$ earlier marked entries below $v$ and at least $m-v-1$ above $v+1$. Subtracting $v$ gives the bound. Thus $\defc(Q)\ge m^2+m-1$.
+
+Each unmarked entry $v$ contributes at least $\max(v,m-1)$ to $\defc(P)-\defc(Q)$. To obtain this bound, count its pairs with the two marked occurrences of each smaller value to its left and with a marked occurrence of each value above $v+1$, then subtract its contribution $v$ to area. These pairs are disjoint for different unmarked entries. For pairs between $Q$ and $X$, an entry $x<m$ contributes at least $m-1$ to $J(Q,X)-\sum X$. For $x=m$ the contribution is $m+1$; for $x>m$ it is $m+1-(x-m-1)$.
+
+Suppose first $k\ge1$. Each factor reaching above $m$ needs an entry $m$ on the way, so the two factors contain at most $k$ and $k-1$ entries above $m$. Hence $R\le(k-1)^2$. For $m=1$ the bound $x_0+x_1\le k$ gives $g\ge k+1$, so both factors reach above $1$ and each contains a $1$. In particular $k\ge2$ in this case.
+
+Every unmarked entry contributes at least three to $\defc(K)$ when its pairs with $X$ are included. Its contribution within $P$ is at least $m-1$, and its contribution to $J(P,X)$ is at least $k$, improving to $k+1$ for $v\le\min(P[-1]+1,m)$. These bounds suffice for $m\ge3$ and for $m=1$. For $m=2$, the improved bound applies to $v=0,1$, while $v=2$ already contributes two within $P$. Each unmarked entry also increases $n$ by one, so its contribution to $\xi=\defc(K)-(3n-15)$ is nonnegative. We may therefore discard these contributions when taking a lower bound on $\xi$. Since $|Q|=2m+2$, the preceding counts give
+\begin{align*}
+ \xi&\ge m^2+m-1+(m-1)|X|+2(x_m+g)-R+k(k+1)-3(|Q|+|X|)+15\\
+ &\ge (m-1)(m-3)+(2m-5)k+2(x_m+g).
+\end{align*}
+This is positive for $m\ge3$. For $m=2$, at most $k$ entries are $0$ or $1$, so $x_m+g\ge k+1$ and the bound is at least $k+1$. For $m=1$ we found $x_m+g\ge k+3$, giving $\xi\ge6-k>0$. Every case contradicts $\xi\le0$.
+
+For $k=0$, imbalance requires the single letter $x$ to satisfy $P[-1]+2\le x\le m$; it gives one upper only. If $m\ge3$, each unmarked $v$ again contributes at least three to $\defc(K)$: either it forms a pair counted by $J(P,X)$, or $v\in\{x,x+1\}$ and it forms a further pair with the marked last entry, not used above. Hence $\xi\ge m^2+m-1+(m-1)-3(2m+3)+15=(m-2)^2>0$, contradicting $\xi\le0$. The only possibility is $m=2$, $P[-1]=0$, $x=2$, which gives an upper in $\mathcal U_n$.
+
+\subsection*{Skeletons ending at their maximum}
+Now $P[-1]=m$. Mark the \emph{last} occurrence of each value. In order these form $S_m=012\cdots m$, since $P$ ends at its maximum. There are $r=|P|-m-1$ unmarked entries. Each unmarked entry $v$ has two earlier entries of each smaller value: otherwise the consecutive rise described above would prevent $v$ from repeating. It also precedes all $m-v$ larger marked entries. These give $2v+(m-v)$ pairs that are not dinv pairs. In the first set of pairs the larger entry is unmarked; in the second it is marked, so no pair is counted twice. Subtracting the contribution $v$ to area leaves at least $m$ per unmarked entry. Since $\defc(S_m)=0$, we obtain $\defc(P)\ge mr$.
+
+Here $g\ge1$ by Lemma~\ref{bounds}. For $k=0$ the only unbalanced letter is $m+1$, giving one lower and $\defc(K)\ge(m+1)r$. Consequently $(m-2)r\le3m-9$. This excludes $m=2$; for $m\ge3$ it gives $r\le2$, whereas $\area(K)\ge\binom{m+2}2>3(m+4)-15\ge3n-15$. Only $m=0,1$ remain.
+
+For $k\ge1$ every unmarked entry forms at least $\max(k+1,g)$ pairs counted by $J(P,X)$. Against $S_m$, subtract $x$ from the number of pairs counted by $J(S_m,(x))$. The result is nonnegative for $x\le m$, since the $x$ smaller levels already contribute $x$ pairs; for $x>m$ it is $-(x-m-1)$. Also $J(S_m,X)=(m-1)|X|+x_m+2g$: a letter below $m$ forms two dinv pairs with $S_m$, a letter $m$ one, and a larger letter none. Substitution in~\eqref{stats} yields
+\begin{align}
+ \defc(K)&\ge \binom{|X|}{2}-h-R+\bigl(m+\max(k+1,g)\bigr)r,\label{D}\\
+ \defc(K)+\area(K)&\ge \binom{m+1}2+(m-1)|X|+x_m+2g+k(k+2)\notag\\
+             &\qquad+\bigl(m+\max(k+1,g)\bigr)r.\label{G}
+\end{align}
+
+\paragraph{Three entries outside the skeleton.} For $k=1$, $R\le1$ (only the longer factor can reach $m+2$), so $\defc(K)\ge1+(m+2)r$. Hence $(m-1)r\le3m-4$. This excludes $m=1$ and gives $r\le2$ for $m\ge2$.
+
+Suppose $m\ge2$, and take the $pTs$ object supplied by the proof of Lemma~\ref{bounds}. The associated lower or upper has factor lengths $1$ and $2$, so its endpoint conditions give $\max X\le m+2$. An outer word $p$ or $s$ of length at least two would contain an entry at least $m+3$. Since the $pTs$ object also has content $X$, this is impossible. Thus its tableau consists of one dual row of length two, and its remaining entry lies in an outer word and is at least $m+1$. By~\eqref{stats}, $\area(K)\ge\binom{m+2}2+3\ge3m+3\ge3n-15$, contradicting $\area(K)<\defc(K)\le3n-15$.
+
+For $m=0$, write the concatenation as $A:B=xyz$. The endpoint conditions give $x\le1$ and $z=0$. The lower condition $y\le x+1$ differs from the upper condition $y\le1$ only for $xyz=120$, giving a single lower: $120$ is the only ordering of $0,1,2$ with the required first and last entries.
+
+\paragraph{At least five entries outside the skeleton.} It remains to exclude $2\le k\le5$.
+
+\noindent\emph{Case $m\ge3$.} The coefficient of $r$ in the lower bound for $\zeta$ obtained from~\eqref{G} is at least $m+k-5\ge0$. After using $x_m+2g\ge2$, the constant term in this bound is $(k-3)^2+1$ at $m=3$ and increases by $m+1+|X|-6$ when $m$ increases by one. Thus the bound is positive, contradicting $\zeta<0$.
+
+\noindent\emph{Case $m=2$.} We have $x_m+g\ge k+1$ as before, and~\eqref{G} gives $\zeta\ge(k-3)(k-4)+(k-3)r$. For $k=3,4,5$ this contradicts $\zeta<0$. At $k=2$ the same inequality~\eqref{G} gives
+\[
+ \zeta\ge-2+x_m+2g+(\max(3,g)-4)r.
+\]
+For $g\ge4$ the right-hand side is positive, contradicting $\zeta<0$. For $1\le g\le3$,~\eqref{D} gives $2r\le3+\binom g2$, hence $r\le g$. Since $x_m+g\ge3$, we again obtain $\zeta\ge x_m+g-2>0$, a contradiction.
+
+\noindent\emph{Case $m=1$.} At most $k$ entries are $0$ or $1$, so $g\ge k+1$. An unmarked zero forms $g+x_1$ pairs counted by $J(P,X)$; an unmarked one forms $g$ and contributes one to area. Keeping this distinction in the derivation of~\eqref{G}, and using~\eqref{D}, gives
+\begin{align*}
+ \zeta&\ge (k-3)(k-5)+x_1+2(g-k-1)+(g-5+\min(x_1,1))r,\\
+ \xi&\ge (k-2)(k-3)+k^2-h-R+(g-2)r.
+\end{align*}
+If $g\ge k+2$, the factor $B$ must reach above $1$, so $x_1\ge1$. Both the constant term and the coefficient of $r$ in the first bound are then nonnegative, contradicting $\zeta<0$.
+
+It remains to consider $g=k+1$. If $x_1\ge1$, the first bound excludes $k=3,4,5$, since it gives $\zeta\ge0$. At $k=2$ the second bound gives $r\le R\le3$, and the first gives $\zeta\ge3+x_1-r>0$, again contradicting $\zeta<0$.
+
+Suppose now that $g=k+1$ and $x_1=0$. All $k+1$ entries above $1$ must lie in $A$ and all $k$ zeros in $B$. Hence $h+R\le k^2$ by~\eqref{oneword}. The bound on $\xi$, together with $\xi\le0$, forces $k=2,3$ and $r=0$. Then $\zeta\ge(k-3)(k-5)\ge0$, contradicting $\zeta<0$.
+
+\noindent\emph{Case $m=0$.} Here $P$ consists of zeros. By Lemma~\ref{bounds}, $x_0\le k$, hence $g\ge k+1$. Counting the $g|P|$ pairs between $P$ and positive entries gives
+\begin{align*}
+ \xi&=(g-3)|P|+\binom{|X|}{2}-h-g-R-3|X|+15,\\
+ \zeta&\ge(g-6)|P|+(k-4)(k-6).
+\end{align*}
+If $g=k+1$, then $x_0=k$, so the bound $x_0+x_1\le k+1$ gives $x_1\le1$. Each factor containing a positive entry must contain a $1$; hence only one factor contains positive entries. All $k+1$ of them must lie in $A$, since $B$ must end in zero. Thus~\eqref{oneword} gives $h+R\le k^2+k$, and so $\xi\ge(k-2)|P|+k^2-7k+11$. For $2\le k\le5$ this contradicts $\xi\le0$ except possibly at $k=3$, $|P|=1$, when $\zeta\ge1$ contradicts $\zeta<0$.
+
+If $g\ge k+2$, both factors contain positive entries. For $k=4,5$ we have $\zeta\ge(k-4)(|P|+k-6)\ge0$, contradicting $\zeta<0$. For $k=2,3$, the bound on $\zeta$ excludes $g\ge6$. Also $B$ contains a zero, so $g\le2k$. These bounds force $g=k+2$, and $\zeta<0$ then requires $|P|\ge7-k$. Now $R\le\binom{g-1}2=\binom{k+1}2$. The displayed bound for $\xi$ gives $\xi\ge |P|-1$ at $k=2$ and $\xi\ge2|P|-5$ at $k=3$, both positive and contrary to $\xi\le0$.
+\end{proof}
+
+\section{The exceptional words}
+It remains to describe the binary skeleton $P$ in the last case of Proposition~\ref{exceptions}, where $(A,B)=((2),\varnothing)$. It begins with $00$: an initial $01$ would force $P=01$, which violates $\defc(K)\le3n-15$. If $P$ ends in $01$, it has the form $00B01$. Otherwise it ends in $11$; we show that it has the form $0011B11$. Here, as in~\cite[\S6.3]{H}, $B$ in a displayed word form denotes an arbitrary binary word.
+
+Suppose $P$ ends in $11$, and write $z,o$ for its numbers of zeros and ones. Each one contributes to the deficit the number of preceding zeros other than the first. In particular the final two ones contribute $2(z-1)$. Remove the initial $00$ and final $11$. Unless the remaining word starts with $11$, all but at most one of its ones have a zero to their left in that word, hence at least three zeros to their left in $P$. It follows that
+\[
+ \defc(P)\ge 2(z-1)+2(o-2)-1=2|P|-7.
+\]
+On the other hand,~\eqref{stats} gives $\defc(K)=\defc(P)+|P|-2\le3(|P|+1)-15$, so $\defc(P)\le2|P|-10$. This contradiction shows that the remaining word starts with $11$, as required.
+
+Pair the lowers listed in Proposition~\ref{exceptions} with full skeletons using the map displayed in~\cite[\S6.3]{H}:
+\[
+\begin{array}{@{}ll@{}}\toprule
+ \text{lower}&\text{full skeleton}\\\midrule
+ (0^{n-1},(1),\varnothing)&0010^{n-4}1\\
+ (0^{n-3},(12),(0))&001120^{n-6}1\\
+ (00B01,(2),\varnothing)&001B12\\
+ (0011B11,(2),\varnothing)&00112B12\\\bottomrule
+\end{array}
+\]
+Each image has two zeros before its first one and, when a two occurs, two ones before its first two. The four image families are disjoint: the first two end in one and differ in whether a two occurs; the others end in two and differ in the number of twos. In the last two rows, removing the specified prefix and suffix recovers $B$. Restricting each row to words of length $n$, the table therefore gives a bijection onto $\mathcal E_n$.
+
+In each row the area increases by one and the deficit is unchanged. In the first row the areas are $1,2$ and both deficits are $n-2$; in the second the areas are $4,5$ and both deficits are $2n-7$, by counting pairs of entries. The second row can occur in our range only for $n\ge8$.
+
+For the last two rows, call the entries outside the displayed binary word $B$ the fixed entries. The dinv pairs internal to $B$ do not change. In the third row, each zero in $B$ forms three dinv pairs with the fixed entries, and each one forms two, both before and after the pairing. In the fourth row, each forms four. Among the fixed entries, the number of dinv pairs decreases from three to two in the third row and from seven to six in the fourth. Thus dinv decreases by one as area increases by one, preserving deficit.
+
+Each lower in the table is the unique lower or upper on its key. In the rows with $k=0$, the single letter exceeds $m$, so it cannot be the entry of $B$ in an upper. In the second row, $120$ is the unique admissible ordering. The uppers in $\mathcal U_n$ likewise have no lower, since a $2$ cannot follow $P[-1]=0$ in an affine word.
+
+At fixed deficit $d$, the pairing cancels each negative term from a lower of area $a-1$ in~\eqref{diff} with one full skeleton in $\mathcal E_n$ of area $a$. The remaining terms count the uppers in $\mathcal U_n$ and the full skeletons in $\mathcal F_n\setminus\mathcal E_n$, namely $\mathcal N_n(d,a)$. We obtain
+\[
+ c_d(a)-c_d(a-1)=\mathcal N_n(d,a)\qquad(0\le a\le d\le3n-15),
+\]
+including $a=0$ since no lower area is negative. This proves Lemma~\ref{first-difference}.
+
+\begin{thebibliography}{9}
+\bibitem{DS} G. Hawkes, \emph{Dyck symmetric functions and applications to $q,t$-Catalan polynomials}, \href{https://arxiv.org/abs/2605.13003v1}{arXiv:2605.13003v1} (2026).
+\bibitem{H} G. Hawkes, \emph{An involution on Dyck paths in the region $\defc\le\min(\area,\dinv)$ that interchanges area and dinv}, \href{https://arxiv.org/abs/2609.21403v3}{arXiv:2609.21403v3} (2026).
+\bibitem{LLL} K. Lee, L. Li and N.~A. Loehr, \emph{A combinatorial approach to the symmetry of $q,t$-Catalan numbers}, SIAM J. Discrete Math. \textbf{32} (2018), 191--232; \href{https://arxiv.org/abs/1602.01126}{arXiv:1602.01126}.
+\end{thebibliography}
+\end{document}
