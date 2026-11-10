@@ -49,30 +49,31 @@ For a key $K:=(P,X,h)$, put $m=\max(P)$ and write $|X|=2k+1$, so $n=|P|+|X|$. Wr
  \area(K)&=\area(P)+\sum_{x\in X}x+k.
  \end{aligned}
 \end{equation}
-Here $\defc(K)$ is the deficit of any lower or upper on $K$, and $\area(K)$ is the area of any lower on $K$. The area of an upper is $\area(K)+1$, whether or not a lower exists. For fixed $n$, let $\kappa(d,a)$ denote the set of keys $K=(P,X,h)$ with $|P|+|X|=n$, $\defc(K)=d$, and $\area(K)=a$. The statistic-preserving bijections~\cite[\S1.2]{H} identify all paths with lowers and all paths other than full skeletons with uppers. Hence
+Here $\defc(K)$ is the deficit of any lower or upper on $K$, and $\area(K)$ is the area of any lower on $K$. The area of an upper is $\area(K)+1$. For fixed $n$, let $\kappa(d,a)$ denote the set of keys $K=(P,X,h)$ with $|P|+|X|=n$, $\defc(K)=d$, and $\area(K)=a$. The statistic-preserving bijections~\cite[\S1.2]{H} identify all paths with lowers and all paths other than full skeletons with uppers. Hence
 \begin{equation}\label{diff}
  \begin{aligned}
  c_d(a)-c_d(a-1)&=\#\{F\in\mathcal F_n:\defc(F)=d,\ \area(F)=a\}\\
  &\quad+\sum_{K\in\kappa(d,a-1)}\bigl(\#\mathrm{uppers}(K)-\#\mathrm{lowers}(K)\bigr).
  \end{aligned}
 \end{equation}
-Here $\#\mathrm{uppers}(K)$ and $\#\mathrm{lowers}(K)$ count the uppers and lowers associated to $K$, respectively. Only unbalanced keys $K$ with $\area(K)<\defc(K)\le3n-15$ matter.
+Here $\#\mathrm{uppers}(K)$ and $\#\mathrm{lowers}(K)$ count the uppers and lowers associated to $K$, respectively.
 
-The next lemma bounds $h$ and the multiplicities in $X$ for an unbalanced key. Let $x_v$ denote the multiplicity of $v$ in $X$.
+The next lemma bounds $h$ and the multiplicities in $X$ for an \emph{unbalanced} key (one with unequal numbers of uppers and lowers). Let $x_v$ denote the multiplicity of $v$ in $X$.
 \begin{lemma}\label{bounds}
 For an unbalanced key,
 \[
- h\le k^2,\qquad x_v+x_{v-1}\le k+1,\qquad
- x_v+x_{v-1}\le k\quad\text{if }v\le\min(P[-1]+1,m).
+x_v+x_{v-1}\le k+1,\qquad
+ x_v+x_{v-1}\le k\quad\text{if }v\le\min(P[-1]+1,m), \qquad   h\le k^2,.
 \]
 Moreover $\max X\ge\min(P[-1]+2,m+1)$.
 \end{lemma}
 \begin{proof}
-We use the $pTs$ objects of~\cite[\S3.3]{H}, with the definitions adjusted to all $k\ge0$ and with endpoints $P[-1]$ and $m-1$ in place of $0$ and $-1$. The telescoping and tableau arguments of~\cite[\S3.2, Lemma~3.4, and Corollary~3.5]{H} express the number of lowers minus the number of uppers on $K$ as a signed sum over these objects. Since $K$ is unbalanced, this sum is nonzero. Thus there exists a $pTs$ object $(p,T,s)$ with content $X$ and $\dinv(p:\mathrm{RR}(T):s)=h$. We have $|p|\ne|s|$, and the column lengths of $T$ are $k-\min(|p|,|s|)$ and $k+1-\max(|p|,|s|)$.
+We use the $pTs$ objects of~\cite[\S3.3]{H}, with the definitions adjusted to all $k\ge0$ and with endpoints $P[-1]$ and $m-1$ in place of $0$ and $-1$. A nonempty corner term in the telescope supplies a $pTs$ object with outer lengths $(k+1,0)$ or $(0,k+1)$ and tableau column lengths $(k,0)$. If both corner terms vanish, the telescoping and tableau arguments of~\cite[\S3.2, Lemma~3.4, and Corollary~3.5]{H} express the nonzero imbalance on $K$ as a signed sum over $pTs$ objects. In either case, there exists a $pTs$ object $(p,T,s)$ with content $X$ and $\dinv(p:\mathrm{RR}(T):s)=h$. We have $|p|\ne|s|$, and the column lengths of $T$ are $k-\min(|p|,|s|)$ and $k+1-\max(|p|,|s|)$.
 
-Regard $p$, each row of $T$, and $s$ as pieces. There are at most $k+1$ nonempty pieces: the tableau has $k-\min(|p|,|s|)$ rows, and two nonempty outer words require $\min(|p|,|s|)\ge1$. The entries within each piece differ pairwise by at least two, so each piece contains at most one entry in $\{v-1,v\}$. This gives $x_v+x_{v-1}\le k+1$. If $v\le\min(P[-1]+1,m)$, the endpoint conditions exclude these values from both $p$ and $s$. Only the tableau rows can then contribute, giving $x_v+x_{v-1}\le k$. A nonempty $p$ contains an entry at least $P[-1]+2$, and a nonempty $s$ contains an entry at least $m+1$. Since at least one is nonempty, the bound on $\max X$ follows.
+The factors $p$, the rows of $T$, and $s^{rev}$ form dual Dyck sequences.  By the restrictions above at most $k+1$ are non-empty and since each contains at most one of $x_v$ or $x_{v+1}$ the first assertion follows. If the hypothesis in the second assertion holds neither $p$ nor $s$ contain either of these elements so the second concusion holds. Since the factors we are considering are dual Dyck they have no internal $\dinv$ and the $\dinv$ of the $pTs$ object is just the sum over all pairs of factors of the $\dinv$ between the two factors, which is at most the minumum length of the the two factors.  So we have a factorization of $2k+1$ elements into $k+1$ parts (some may be empty) and will to consider, over such factorizations, what the maximum of the possible sum over all pairs of the minimum factor length in that pair is.  But, given $k+1$ cups and $2k+1$ coins it is an elementary combinatorics problem to show the maximum sum over pairs of cups of the number of coins in the less full cup is $k^2$.  
 
-All dinv pairs lie between distinct pieces. Two pieces of lengths $l,t$ form at most $\min(l,t)$ dinv pairs, since each entry has at most one partner in the other piece. Summing these bounds over all pairs of pieces therefore bounds $h$. Pad the list of lengths with zeros to obtain $k+1$ lengths with sum $2k+1$. Transferring one unit from a largest length to a smallest length cannot decrease the sum of the pairwise minima when those lengths differ by at least two. The sum is therefore maximized when $k$ lengths are $2$ and the remaining length is $1$. Hence $h\le2\binom k2+k=k^2$.
+Finally, a nonempty $p$ contains an entry at least $P[-1]+2$, and a nonempty $s$ contains an entry at least $m+1$. Since at least one is nonempty, the bound on $\max X$ follows.
+
 \end{proof}
 
 \section{Classification of the unbalanced keys}
