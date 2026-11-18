@@ -291,24 +291,41 @@ Now suppose $g=k+1$.  Then $x_0=k$ along with the bound $x_0+x_1\le k+1$ gives $
 If $g\ge k+2$, both factors contain positive entries. If $k=4,5$ we have $\zeta\ge(k-4)(|P|+k-6)\ge0$, contradicting $\zeta<0$. For $k=2,3$, the bound on $\zeta$ excludes $g\ge6$. Also $B$ contains a zero, so $g\le2k$. These bounds force $g=k+2$, and $\zeta<0$ then requires $|P|\ge7-k$. Now Claim~\ref{excess-bounds} gives $R\le\binom{g-1}2=\binom{k+1}2$. Equation~\eqref{zero-xi} and $h\le k^2$ give $\xi\ge |P|-1$ at $k=2$ and $\xi\ge2|P|-5$ at $k=3$, both positive since $|P|\ge7-k$, contrary to $\xi\le0$.
 \end{proof}
 
+Recall from~\cite[\S6.3]{H} that $\mathcal U_n$ is the set of uppers
+\[
+ \mathcal U_n=\{(P,\varnothing,(2)):|P|=n-1,\ \max(P)=2,\ P[-1]=0\}.
+\]
+Define a set of lowers
+\[
+ \begin{aligned}
+ \mathcal L_n={}&\{(0^{n-1},(1),\varnothing),\ (0^{n-3},(12),(0)),\ (00B01,(2),\varnothing),\ (0011B11,(2),\varnothing)\},
+ \end{aligned}
+\]
+where $B$ in a displayed word form denotes an arbitrary binary word, and only triples of total length $n$ are included.
+
 \Needspace{6\baselineskip}
 \begin{proposition}\label{exceptions}
-Suppose $K=(P,X,h)$ is an unbalanced key with $\area(K)<\defc(K)\le3n-15$. Exactly one lower or upper $(P,A,B)$ is associated to $K$. If it is an upper, it belongs to $\mathcal U_n$. For a lower, either $P$ consists of zeros, with $(A,B)\in\{((1),\varnothing),((12),(0))\}$; or $P$ is binary and ends in $1$, with $(A,B)=((2),\varnothing)$.
+Every unbalanced key $K=(P,X,h)$ with $\area(K)<\defc(K)\le3n-15$ has exactly one associated lower or upper. This belongs to $\mathcal U_n$ if it is an upper and to $\mathcal L_n$ if it is a lower.
 \end{proposition}
 \begin{proof}
-If $P[-1]<m$, Claim~\ref{below-maximum} gives a single upper in $\mathcal U_n$. If $P[-1]=m$, Claim~\ref{maximum-height} gives $m\le1$. Claims~\ref{binary-maximum} and~\ref{zero-maximum} then give exactly the stated lowers, each unique on its key.
+If $P[-1]<m$, Claim~\ref{below-maximum} gives a single upper in $\mathcal U_n$.
+
+If $P[-1]=m$, Claim~\ref{maximum-height} gives $m\le1$. If $m=0$, Claim~\ref{zero-maximum} gives one of the first two lowers in $\mathcal L_n$, each unique on its key. Otherwise, $m=1$, and Claim~\ref{binary-maximum} shows there is a unique lower of the form $(P,(2),\varnothing)$ with $P[-1]=1$. It remains to show that $P$ has one of the two binary forms in $\mathcal L_n$.
+
+The $2$ of $A$ forms deficit pairs with all $|P|-2$ noninitial entries of $P$, so
+\[
+ \defc(K)=\defc(P)+|P|-2\le3(|P|+1)-15
+ \quad\implies\quad\defc(P)\le2|P|-10.
+\]
+In particular, $|P|\ge5$, so the second element of $P$ is not extractable, and so $P$ begins $00$, which in turn implies that it has positive $\defc$ and that, in fact, $|P| \ge 6$. If $P$ ends in $01$, it has the form $00B01$. Otherwise, $P$ ends in $11$. Write $z,e$ for the numbers of zeros and ones, respectively, in $P$. Now suppose that the third or fourth entry of $P$ is $0$. Then counting the noninitial zeros pairing with the last two $1$s and the other $1$s pairing with two noninitial zeros in the first four entries gives
+\[
+ \defc(P)\ge2(z-1)+2(e-3)=2|P|-8,
+\]
+contrary to $\defc(P)\le2|P|-10$. Thus $P$ has the form $0011B11$, as required.
 \end{proof}
 
-\section{The exceptional words}
-It remains to describe the binary skeleton $P$ in the last case of Proposition~\ref{exceptions}, where $(A,B)=((2),\varnothing)$. It begins with $00$: an initial $01$ would force $P=01$, which violates $\defc(K)\le3n-15$. If $P$ ends in $01$, it has the form $00B01$. Otherwise it ends in $11$; we show that it has the form $0011B11$. Here, as in~\cite[\S6.3]{H}, $B$ in a displayed word form denotes an arbitrary binary word.
-
-Suppose $P$ ends in $11$, and write $z,o$ for its numbers of zeros and ones. Each one contributes to the deficit the number of preceding zeros other than the first. In particular the final two ones contribute $2(z-1)$. Remove the initial $00$ and final $11$. Unless the remaining word starts with $11$, all but at most one of its ones have a zero to their left in that word, hence at least three zeros to their left in $P$. It follows that
-\[
- \defc(P)\ge 2(z-1)+2(o-2)-1=2|P|-7.
-\]
-On the other hand, the appended $2$ pairs with all $|P|-2$ noninitial entries of $P$, giving $\defc(K)=\defc(P)+|P|-2\le3(|P|+1)-15$, so $\defc(P)\le2|P|-10$. This contradiction shows that the remaining word starts with $11$, as required.
-
-Pair the lowers listed in Proposition~\ref{exceptions} with full skeletons using the map displayed in~\cite[\S6.3]{H}:
+\begin{proof}[Proof of Lemma~\ref{first-difference}]
+Fix $0\le a\le d\le3n-15$. By~\eqref{diff} and Proposition~\ref{exceptions}, it suffices to match the unbalanced lowers of area $a-1$ and deficit $d$ with the full skeletons in $\mathcal E_n$ of area $a$ and deficit $d$. Use the map from~\cite[\S6.3]{H}:
 \[
 \begin{array}{@{}ll@{}}\toprule
  \text{lower}&\text{full skeleton}\\\midrule
@@ -318,19 +335,10 @@ Pair the lowers listed in Proposition~\ref{exceptions} with full skeletons using
  (0011B11,(2),\varnothing)&00112B12\\\bottomrule
 \end{array}
 \]
-Each image has two zeros before its first one and, when a two occurs, two ones before its first two. The four image families are disjoint: the first two end in one and differ in whether a two occurs; the others end in two and differ in the number of twos. In the last two rows, removing the specified prefix and suffix recovers $B$. Restricting each row to words of length $n$, the table therefore gives a bijection onto $\mathcal E_n$.
+It is clear that this is a well-defined bijection that raises area by $1$. It remains only to verify that it preserves deficit.
+In the first two rows, the deficits on both sides are $n-2$ and $2n-7$, respectively. In the third row, the word only changes by removing the last $0$, raising it to a $1$, and inserting it in position $3$. This causes it to lose deficit pairs with the last $1$ and last $2$ and gain one with the second $0$; it also causes the previously first $1$ to become noninitial and gain a pair with the last $2$. In the fourth row, the word changes by removing the last $1$, raising it to $2$, and placing it in position $5$. It loses its deficit pair with the last $2$, gains a deficit pair with the second $1$, and keeps exactly its other pairs.
 
-In each row the area increases by one and the deficit is unchanged. In the first row the areas are $1,2$ and both deficits are $n-2$; in the second the areas are $4,5$ and both deficits are $2n-7$, by counting pairs of entries. The second row can occur in our range only for $n\ge8$.
-
-For the last two rows, call the entries outside the displayed binary word $B$ the fixed entries. The dinv pairs internal to $B$ do not change. In the third row, each zero in $B$ forms three dinv pairs with the fixed entries, and each one forms two, both before and after the pairing. In the fourth row, each forms four. Among the fixed entries, the number of dinv pairs decreases from three to two in the third row and from seven to six in the fourth. Thus dinv decreases by one as area increases by one, preserving deficit.
-
-Each lower in the table is the unique lower or upper on its key. In the rows with $k=0$, the single letter exceeds $m$, so it cannot be the entry of $B$ in an upper. In the second row, $120$ is the unique admissible ordering. The uppers in $\mathcal U_n$ likewise have no lower, since a $2$ cannot follow $P[-1]=0$ in an affine word.
-
-At fixed deficit $d$, the pairing cancels each negative term from a lower of area $a-1$ in~\eqref{diff} with one full skeleton in $\mathcal E_n$ of area $a$. The remaining terms count the uppers in $\mathcal U_n$ and the full skeletons in $\mathcal F_n\setminus\mathcal E_n$, namely $\mathcal N_n(d,a)$. We obtain
-\[
- c_d(a)-c_d(a-1)=\mathcal N_n(d,a)\qquad(0\le a\le d\le3n-15),
-\]
-including $a=0$ since no lower area is negative. This proves Lemma~\ref{first-difference}.
+\end{proof}
 
 \begin{thebibliography}{9}
 \bibitem{DS} G. Hawkes, \emph{Dyck symmetric functions and applications to $q,t$-Catalan polynomials}, \href{https://arxiv.org/abs/2605.13003v1}{arXiv:2605.13003v1} (2026).
